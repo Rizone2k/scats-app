@@ -19,7 +19,7 @@ const Header = (props) => {
 
             <TouchableOpacity
                 onPress={() => {
-                    alert("Open drawer")
+                    navigation.openDrawer();
                 }}>
                 <Icon name="menu-outline" size={40} color="#fff" />
             </TouchableOpacity>

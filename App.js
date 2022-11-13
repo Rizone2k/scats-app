@@ -2,13 +2,13 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import TabNavigator from "./src/navigation/TabNavigator";
-// import DrawerNavigator from "./src/navigation/DrawerNavigator";
+import DrawerNavigator from "./src/navigation/DrawerNavigator";
 
 export default function App() {
 	return (
 		<View style={styles.container}>
 			<NavigationContainer>
-				<TabNavigator></TabNavigator>
+				<DrawerNavigator></DrawerNavigator>
 			</NavigationContainer>
 		</View>
 	);
