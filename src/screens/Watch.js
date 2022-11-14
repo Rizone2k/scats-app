@@ -1,19 +1,22 @@
 import * as React from 'react';
-import { View, StyleSheet, Button, Dimensions } from 'react-native';
+import { View, StyleSheet, Text, Dimensions } from 'react-native';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import Header from '../components/Header';
 
-const screenWidth = Dimensions.get("screen").width;
-const screenHeight = Dimensions.get("screen").height;
+const WIDTH = Dimensions.get("window").width;
+const HEIGHT = Dimensions.get("window").height;
 
 const Watch = ({ route, navigation }) => {
-    const { source } = route.params
+    const { id } = route.params
     const video = React.useRef(null);
     const [status, setStatus] = React.useState({});
     return (
         <View>
             <Header allowBack={true}></Header>
-            <Video
+            <Text>
+                {id}
+            </Text>
+            {/* <Video
                 ref={video}
                 style={styles.video}
                 source={{
@@ -22,7 +25,7 @@ const Watch = ({ route, navigation }) => {
                 useNativeControls
                 resizeMode="contain"
                 onPlaybackStatusUpdate={status => setStatus(() => status)}
-            />
+            /> */}
         </View>
     );
 }
@@ -35,8 +38,8 @@ const styles = StyleSheet.create({
     },
     video: {
         alignSelf: 'center',
-        width: screenWidth,
-        height: 200,
+        width: WIDTH,
+        height: WIDTH * (9 / 16),
     },
     buttons: {
         flexDirection: 'row',

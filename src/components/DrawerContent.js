@@ -32,11 +32,11 @@ const DrawerContent = (props) => {
                             style={styles.authBtn}
                             icon={({ size, color }) => (
                                 <Icon
-                                    name="log-out-outline" size={size} color={color}
+                                    name="person-add-outline" size={size} color={color}
                                 />
                             )}
                             mode="contained"
-                            onPress={() => console.log('Logout')}
+                            onPress={() => console.log('Register')}
                         >
                             Đăng Ký
                         </Button>
