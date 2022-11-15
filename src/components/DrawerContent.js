@@ -11,48 +11,50 @@ const DrawerContent = (props) => {
                 <View style={styles.logoConainer}>
                     <Image source={require('../images/logo.png')} style={styles.logoImage} />
                 </View>
-                <Drawer.Section style={styles.authSection}>
-                    <Text style={{ color: "#fff", textAlign: "center" }}>
-                        Bạn chưa đăng nhập
-                    </Text>
-                    <View style={{ flexDirection: "row" }}>
-                        <Button
-                            style={styles.authBtn}
-                            icon={({ size, color }) => (
-                                <Icon
-                                    name="log-in-outline" size={size} color={color}
-                                />
-                            )}
-                            mode="contained"
-                            onPress={() => console.log('Login')}
-                        >
-                            Đăng Nhập
-                        </Button>
-                        <Button
-                            style={styles.authBtn}
-                            icon={({ size, color }) => (
-                                <Icon
-                                    name="person-add-outline" size={size} color={color}
-                                />
-                            )}
-                            mode="contained"
-                            onPress={() => console.log('Register')}
-                        >
-                            Đăng Ký
-                        </Button>
+                <Drawer.Section style={{ justifyContent: "center", alignItems: "center", marginTop: 10 }}>
+                    <View style={styles.authSection}>
+                        <Text style={{ color: "#fff", textAlign: "center" }}>
+                            Bạn chưa đăng nhập
+                        </Text>
+                        <View style={{ flexDirection: "row" }}>
+                            <Button
+                                style={styles.authBtn}
+                                icon={({ size, color }) => (
+                                    <Icon
+                                        name="log-in-outline" size={size} color={color}
+                                    />
+                                )}
+                                mode="contained"
+                                uppercase={false}
+                                onPress={() => console.log('Login')}
+                            >
+                                Đăng nhập
+                            </Button>
+                            <Button
+                                style={styles.authBtn}
+                                icon={({ size, color }) => (
+                                    <Icon
+                                        name="person-add-outline" size={size} color={color}
+                                    />
+                                )}
+                                mode="contained"
+                                uppercase={false}
+                                onPress={() => console.log('Register')}
+                            >
+                                Đăng ký
+                            </Button>
+                        </View>
                     </View>
                 </Drawer.Section>
-
                 <Drawer.Section style={styles.drawerSection} >
                     <DrawerItem
-                        style={styles.text}
                         icon={({ size, color }) => (
                             <Icon
                                 name="home-outline" size={size} color="#fff"
                             />
                         )}
                         label={() => {
-                            return <Text style={styles.text}>Home</Text>
+                            return <Text style={styles.drawerTitle}>Home</Text>
                         }}
                         onPress={() => {
 
@@ -61,14 +63,13 @@ const DrawerContent = (props) => {
                 </Drawer.Section>
                 <Drawer.Section style={styles.drawerSection} >
                     <DrawerItem
-                        style={styles.text}
                         icon={({ size, color }) => (
                             <Icon
                                 name="search-outline" size={size} color="#fff"
                             />
                         )}
                         label={() => {
-                            return <Text style={styles.text}>Search</Text>
+                            return <Text style={styles.drawerTitle}>Search</Text>
                         }}
                         onPress={() => {
 
@@ -79,7 +80,7 @@ const DrawerContent = (props) => {
                     <List.AccordionGroup>
                         <List.Accordion
                             style={styles.list}
-                            titleStyle={[styles.text, styles.listTitle]}
+                            titleStyle={[styles.drawerTitle, styles.listTitle]}
                             title="Thể Loại"
                             id="1"
                             left={() => <Icon name="list-outline" size={30} color="#fff" />}
@@ -88,11 +89,11 @@ const DrawerContent = (props) => {
                                 return <Icon name="chevron-down-outline" size={20} color="#fff" />
                             }}
                         >
-                            <List.Item style={{ backgroundColor: "#222222" }} titleStyle={styles.text} title="Ecchi" />
+                            <List.Item titleStyle={styles.listItem} title="Ecchi" />
                         </List.Accordion>
                         <List.Accordion
                             style={styles.list}
-                            titleStyle={[styles.text, styles.listTitle]}
+                            titleStyle={[styles.drawerTitle, styles.listTitle]}
                             title="Năm"
                             id="2"
                             left={() => <Icon name="list-outline" size={30} color="#fff" />}
@@ -101,11 +102,11 @@ const DrawerContent = (props) => {
                                 return <Icon name="chevron-down-outline" size={20} color="#fff" />
                             }}
                         >
-                            <List.Item style={{ backgroundColor: "#222222" }} titleStyle={styles.text} title="2022" />
+                            <List.Item titleStyle={styles.listItem} title="2022" />
                         </List.Accordion>
                         <List.Accordion
                             style={styles.list}
-                            titleStyle={[styles.text, styles.listTitle]}
+                            titleStyle={[styles.drawerTitle, styles.listTitle]}
                             title="Quốc Gia"
                             id="3"
                             left={() => <Icon name="list-outline" size={30} color="#fff" />}
@@ -114,7 +115,7 @@ const DrawerContent = (props) => {
                                 return <Icon name="chevron-down-outline" size={20} color="#fff" />
                             }}
                         >
-                            <List.Item style={{ backgroundColor: "#222222" }} titleStyle={styles.text} title="Mỹ" />
+                            <List.Item titleStyle={styles.listItem} title="Mỹ" />
                         </List.Accordion>
                     </List.AccordionGroup>
                 </Drawer.Section>
@@ -132,7 +133,13 @@ const styles = StyleSheet.create({
     },
     authSection: {
         color: "#fff",
-        marginTop: 10
+        marginTop: 10,
+        borderBottomColor: "gray",
+        borderBottomWidth: 1,
+        width: "95%",
+        justifyContent: "center",
+        alignItems: "center",
+        paddingBottom: 10
     },
     logoConainer: {
         height: 50,
@@ -145,13 +152,15 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
     authBtn: {
-        marginVertical: 5,
-        marginHorizontal: 2
+        marginHorizontal: 2,
+        padding: 0,
+        marginVertical: 10
     },
     drawerSection: {
     },
-    text: {
-        color: '#fff'
+    drawerTitle: {
+        color: "#fff",
+        fontSize: 17
     },
     list: {
         backgroundColor: "#222222",
@@ -159,5 +168,9 @@ const styles = StyleSheet.create({
     },
     listTitle: {
         marginLeft: 18
+    },
+    listItem: {
+        color: "#fff",
+        fontSize: 14
     }
 })
