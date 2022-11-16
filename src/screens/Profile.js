@@ -8,7 +8,7 @@ const Profile = ({ navigation }) => {
             <Button
                 title='Login'
                 onPress={() => {
-                    navigation.navigate("LoginScreen")
+                    navigation.navigate("AuthScreen")
                 }}
             />
         </View>

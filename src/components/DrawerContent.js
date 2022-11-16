@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Image, View } from 'react-native';
 import { Drawer, Text, Button, List } from 'react-native-paper';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const DrawerContent = (props) => {
+
+    useEffect(() => {
+        console.log("Drawer Mount");
+        return () => {
+            console.log("Drawer Unmount");
+        }
+    }, []);
+
     return (
         <View style={styles.container}>
             <DrawerContentScrollView {...props}>
@@ -26,22 +34,9 @@ const DrawerContent = (props) => {
                                 )}
                                 mode="contained"
                                 uppercase={false}
-                                onPress={() => console.log('Login')}
+                                onPress={() => props.navigation.navigate("AuthScreen")}
                             >
                                 Đăng nhập
-                            </Button>
-                            <Button
-                                style={styles.authBtn}
-                                icon={({ size, color }) => (
-                                    <Icon
-                                        name="person-add-outline" size={size} color={color}
-                                    />
-                                )}
-                                mode="contained"
-                                uppercase={false}
-                                onPress={() => console.log('Register')}
-                            >
-                                Đăng ký
                             </Button>
                         </View>
                     </View>
@@ -54,7 +49,7 @@ const DrawerContent = (props) => {
                             />
                         )}
                         label={() => {
-                            return <Text style={styles.drawerTitle}>Home</Text>
+                            return <Text style={styles.drawerTitle}>Trang Chủ</Text>
                         }}
                         onPress={() => {
 
@@ -69,7 +64,7 @@ const DrawerContent = (props) => {
                             />
                         )}
                         label={() => {
-                            return <Text style={styles.drawerTitle}>Search</Text>
+                            return <Text style={styles.drawerTitle}>Tìm Kiếm</Text>
                         }}
                         onPress={() => {
 

@@ -1,14 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import SlideItem from './SlideItem';
+import getBanner from '../../api/getBanner';
 
 const { width, heigth } = Dimensions.get('window');
 
-const Slide = ({ data }) => {
+const Slide = () => {
     const [imgActive, setimgActive] = useState(0);
+    const [banner, setBanner] = useState([]);
     const scrollView = useRef();
 
-    useEffect(() => {
+    const loop = (data) => {
         const numData = data.length;
         let scrolled = 1;
         setInterval(() => {
@@ -20,6 +22,25 @@ const Slide = ({ data }) => {
                 scrollView.current.scrollTo({ x: 0, y: 0, animated: true });
             }
         }, 3000);
+    }
+
+    useEffect(() => {
+        async function callApi() {
+            try {
+                const rs = await getBanner();
+                if (rs.status == "success") {
+                    if (rs.data != null) {
+                        setBanner(rs.data);
+                        loop(rs.data);
+                    }
+                } else {
+                    alert(rs.message);
+                }
+            } catch (error) {
+                alert("Error !!!");
+            }
+        }
+        callApi();
 
     }, []);
 
@@ -38,14 +59,14 @@ const Slide = ({ data }) => {
                 horizontal
             >
                 {
-                    data.map((e, index) =>
+                    banner.map((e, index) =>
                         <SlideItem item={e} key={e.id} />
                     )
                 }
             </ScrollView>
             <View style={styles.wrapDot}>
                 {
-                    data.map((e, index) =>
+                    banner.map((e, index) =>
                         <Text style={[styles.dot, imgActive == index ? styles.dotActive : ""]} key={e.id}>&#8226;</Text>
                     )
                 }

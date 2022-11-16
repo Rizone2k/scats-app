@@ -8,7 +8,7 @@ const Tab = createBottomTabNavigator();
 
 const getRouteName = (route) => {
     const routeName = getFocusedRouteNameFromRoute(route);
-    if (routeName?.includes('WatchScreen') || routeName?.includes('LoginScreen')) {
+    if (routeName?.includes('WatchScreen') || routeName?.includes('AuthScreen')) {
         return "none";
     }
     return "flex";
