@@ -24,24 +24,24 @@ const Slide = () => {
         }, 3000);
     }
 
-    useEffect(() => {
-        async function callApi() {
-            try {
-                const rs = await getBanner();
-                if (rs.status == "success") {
-                    if (rs.data != null) {
-                        setBanner(rs.data);
-                        loop(rs.data);
-                    }
-                } else {
-                    alert(rs.message);
+    const callApiBanner = async () => {
+        try {
+            const rs = await getBanner();
+            if (rs.status == "success") {
+                if (rs.data != null) {
+                    setBanner(rs.data);
+                    loop(rs.data);
                 }
-            } catch (error) {
-                alert("Error !!!");
+            } else {
+                alert(rs.message);
             }
+        } catch (error) {
+            alert("Error !!!");
         }
-        callApi();
+    }
 
+    useEffect(() => {
+        callApiBanner();
     }, []);
 
     const onSlideChange = (nativeEvent) => {

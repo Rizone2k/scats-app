@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0.5, height: 0.5 },
         shadowOpacity: 0.5,
         shadowRadius: 3,
-        elevation: 5,
     },
     textView: {
         position: 'absolute',
@@ -62,7 +61,6 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
         marginBottom: 5,
         fontWeight: "bold",
-        elevation: 5
     },
     itemView: {
         color: 'white',

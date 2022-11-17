@@ -1,13 +1,68 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Image, View } from 'react-native';
 import { Drawer, Text, Button, List } from 'react-native-paper';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/Ionicons';
+import getCountry from '../api/getCountry';
+import getGenre from '../api/getGenre';
+import getYear from '../api/getYear';
 
 const DrawerContent = (props) => {
 
+    const [genre, setGenre] = useState([]);
+    const [country, setCountry] = useState([]);
+    const [year, setYear] = useState([]);
+
+    const callApiYear = async () => {
+        try {
+            const rs = await getYear();
+            if (rs.status == "success") {
+                if (rs.data != null) {
+                    setYear(rs.data);
+                }
+            } else {
+                alert(rs.message);
+            }
+        } catch (error) {
+            alert("Error !!!");
+        }
+    }
+
+    const callApiGenre = async () => {
+        try {
+            const rs = await getGenre();
+            if (rs.status == "success") {
+                if (rs.data != null) {
+                    setGenre(rs.data);
+                }
+            } else {
+                alert(rs.message);
+            }
+        } catch (error) {
+            alert("Error !!!");
+        }
+    }
+
+    const callApiCountry = async () => {
+        try {
+            const rs = await getCountry();
+            if (rs.status == "success") {
+                if (rs.data != null) {
+                    setCountry(rs.data);
+                }
+            } else {
+                alert(rs.message);
+            }
+        } catch (error) {
+            alert("Error !!!");
+        }
+    }
+
     useEffect(() => {
         console.log("Drawer Mount");
+        callApiYear();
+        callApiCountry();
+        callApiGenre();
         return () => {
             console.log("Drawer Unmount");
         }
@@ -84,7 +139,9 @@ const DrawerContent = (props) => {
                                 return <Icon name="chevron-down-outline" size={20} color="#fff" />
                             }}
                         >
-                            <List.Item titleStyle={styles.listItem} title="Ecchi" />
+                            {
+                                genre.map((e, index) => <List.Item titleStyle={styles.listItem} title={e.name} key={e.id} />)
+                            }
                         </List.Accordion>
                         <List.Accordion
                             style={styles.list}
@@ -97,7 +154,9 @@ const DrawerContent = (props) => {
                                 return <Icon name="chevron-down-outline" size={20} color="#fff" />
                             }}
                         >
-                            <List.Item titleStyle={styles.listItem} title="2022" />
+                            {
+                                year.map((e, index) => <List.Item titleStyle={styles.listItem} title={e.name} key={e.id} />)
+                            }
                         </List.Accordion>
                         <List.Accordion
                             style={styles.list}
@@ -110,7 +169,9 @@ const DrawerContent = (props) => {
                                 return <Icon name="chevron-down-outline" size={20} color="#fff" />
                             }}
                         >
-                            <List.Item titleStyle={styles.listItem} title="Mỹ" />
+                            {
+                                country.map((e, index) => <List.Item titleStyle={styles.listItem} title={e.name} key={e.id} />)
+                            }
                         </List.Accordion>
                     </List.AccordionGroup>
                 </Drawer.Section>
