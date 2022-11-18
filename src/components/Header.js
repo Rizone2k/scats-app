@@ -17,7 +17,7 @@ const Header = (props) => {
                     <Icon name="arrow-back-outline" size={(HEIGHT / 15) - 10} color="#fff" />
                 </TouchableOpacity>
             }
-            <Image source={require('../images/logo.png')} style={styles.logo} />
+            <Image source={require('../images/logo-2.png')} style={styles.logo} />
 
             <TouchableOpacity
                 onPress={() => {

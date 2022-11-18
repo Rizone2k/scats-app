@@ -72,16 +72,17 @@ const DrawerContent = (props) => {
         <View style={styles.container}>
             <DrawerContentScrollView {...props}>
                 <View style={styles.logoConainer}>
-                    <Image source={require('../images/logo.png')} style={styles.logoImage} />
+                    <Image source={require('../images/logo-2.png')} style={styles.logoImage} />
                 </View>
                 <Drawer.Section style={{ justifyContent: "center", alignItems: "center", marginTop: 10 }}>
                     <View style={styles.authSection}>
-                        <Text style={{ color: "#fff", textAlign: "center" }}>
+                        <Text style={{ color: "#fff", textAlign: "center", fontFamily: 'Montserrat' }}>
                             Bạn chưa đăng nhập
                         </Text>
                         <View style={{ flexDirection: "row" }}>
                             <Button
                                 style={styles.authBtn}
+                                labelStyle={{ fontFamily: 'Montserrat' }}
                                 icon={({ size, color }) => (
                                     <Icon
                                         name="log-in-outline" size={size} color={color}
@@ -216,7 +217,8 @@ const styles = StyleSheet.create({
     },
     drawerTitle: {
         color: "#fff",
-        fontSize: 17
+        fontSize: 17,
+        fontFamily: 'Montserrat'
     },
     list: {
         backgroundColor: "#222222",
@@ -227,6 +229,7 @@ const styles = StyleSheet.create({
     },
     listItem: {
         color: "#fff",
-        fontSize: 14
+        fontSize: 14,
+        fontFamily: 'Montserrat'
     }
 })

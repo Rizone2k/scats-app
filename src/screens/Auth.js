@@ -18,19 +18,20 @@ const Auth = () => {
                         <TextInput
                             style={styles.formInput}
                             mode="outlined"
-                            label="Tên Đăng Nhập"
+                            label={<Text style={{ fontFamily: 'Montserrat' }}>Tên Đăng Nhập</Text>}
                             placeholder="Nhập tên đăng nhập"
                         />
                         <TextInput
                             style={styles.formInput}
                             mode="outlined"
-                            label="Mật Khẩu"
+                            label={<Text style={{ fontFamily: 'Montserrat' }}>Mật Khẩu</Text>}
                             secureTextEntry
                             placeholder="Nhập mật khẩu"
                             right={<TextInput.Icon name="eye-outline" />}
                         />
                         <Button
                             style={styles.formBtn}
+                            labelStyle={{ fontFamily: 'Montserrat' }}
                             mode="contained"
                             uppercase={false}
                             onPress={() => console.log('Login')}
@@ -43,27 +44,28 @@ const Auth = () => {
                         <TextInput
                             style={styles.formInput}
                             mode="outlined"
-                            label="Tên Đăng Nhập"
+                            label={<Text style={{ fontFamily: 'Montserrat' }}>Tên Đăng Nhập</Text>}
                             placeholder="Nhập tên đăng nhập"
                         />
                         <TextInput
                             style={styles.formInput}
                             mode="outlined"
-                            label="Mật Khẩu"
+                            label={<Text style={{ fontFamily: 'Montserrat' }}>Mật Khẩu</Text>}
                             secureTextEntry
-                            placeholder="Nhập mật khẩu"
+                            placeholder="Mật khẩu"
                             right={<TextInput.Icon name="eye-outline" />}
                         />
                         <TextInput
                             style={styles.formInput}
                             mode="outlined"
-                            label="Nhập Lại Mật Khẩu"
+                            label={<Text style={{ fontFamily: 'Montserrat' }}>Nhập Lại Mật Khẩu</Text>}
                             secureTextEntry
                             placeholder="Nhập lại mật khẩu"
                             right={<TextInput.Icon name="eye-outline" />}
                         />
                         <Button
                             style={styles.formBtn}
+                            labelStyle={{ fontFamily: 'Montserrat' }}
                             mode="contained"
                             uppercase={false}
                             onPress={() => console.log('Register')}
@@ -115,11 +117,13 @@ const styles = StyleSheet.create({
     formTitle: {
         fontSize: 35,
         lineHeight: 45,
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
+        fontFamily: 'Montserrat'
     },
     formInput: {
         width: "100%",
-        marginVertical: 5
+        marginVertical: 5,
+        fontFamily: 'Montserrat'
     },
     formBtn: {
         marginTop: 10
@@ -153,6 +157,7 @@ const styles = StyleSheet.create({
     },
     touchText: {
         fontSize: 15,
-        marginLeft: 5
+        marginLeft: 5,
+        fontFamily: 'Montserrat'
     }
 });

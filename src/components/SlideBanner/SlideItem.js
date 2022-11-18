@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     itemTitle: {
+        fontFamily: 'MontserratBold',
         color: 'white',
         fontSize: 20,
         shadowColor: '#000',
@@ -63,6 +64,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     itemView: {
+        fontFamily: 'Montserrat',
         color: 'white',
         fontSize: 12,
         shadowColor: '#000',
