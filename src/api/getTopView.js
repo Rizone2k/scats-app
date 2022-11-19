@@ -1,8 +1,8 @@
 import instance from "./axios.config";
 
-const getMovieNew = async () => {
+const getTopView = async () => {
     try {
-        const res = await instance.get(`/movie/new`);
+        const res = await instance.get(`/movie/top/view`);
         if (res.status == 200) {
             const resutl = res.data;
             return resutl;
@@ -12,4 +12,4 @@ const getMovieNew = async () => {
     }
 }
 
-export default getMovieNew;
+export default getTopView;

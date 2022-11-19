@@ -13,7 +13,6 @@ import {
 import { Button } from 'react-native-paper';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import { WebView } from 'react-native-webview';
-import { FlashList } from "@shopify/flash-list";
 import Icon from 'react-native-vector-icons/Ionicons';
 import Header from '../components/Header';
 import getMovie from '../api/getMovie';
@@ -53,10 +52,10 @@ const Watch = ({ route, navigation }) => {
             if (rs.status == "success") {
                 if (rs.data != null) setMovie(rs.data);
             } else {
-                alert(rs.message);
+                Alert.alert(null, rs.message);
             }
         } catch (error) {
-            alert("Error !!!");
+            Alert.alert(null, "Error !!!");
         }
     }
 
@@ -150,31 +149,6 @@ const Watch = ({ route, navigation }) => {
                                     </View>
                                 </View>
                             </View>
-
-                            {/* <View style={{ height: 25, marginTop: 10, paddingHorizontal: 5, }}>
-                                <FlashList
-                                    horizontal
-                                    data={movie.Genres}
-                                    renderItem={({ item }) =>
-                                        <TouchableOpacity
-                                            style={
-                                                {
-                                                    backgroundColor: "black",
-                                                    marginHorizontal: 2,
-                                                    paddingVertical: 3,
-                                                    paddingHorizontal: 5,
-                                                    borderRadius: 10,
-                                                }
-                                            }
-                                        >
-                                            <Text style={{ color: "#fff" }}>#{item.name}</Text>
-                                        </TouchableOpacity>
-                                    }
-                                    estimatedItemSize={200}
-                                >
-
-                                </FlashList>
-                            </View> */}
 
                             <View style={styles.genresWrap}>
                                 {
@@ -367,32 +341,36 @@ const Watch = ({ route, navigation }) => {
                                         style={{}}
                                     >
                                         {
-                                            movie.Episodes.map((e) =>
-                                                <TouchableOpacity
-                                                    style={[
-                                                        styles.epTouch,
-                                                        e.id == episodeActive ? styles.epActive : ''
-                                                    ]}
-                                                    key={e.id}
-                                                    onPress={() => {
-                                                        if (e.hls == source) {
-                                                            Alert.alert(null, "Bạn đã chọn !!!");
-                                                        } else {
-                                                            setSource(e.hls);
-                                                            setEpisodeActive(e.id);
-                                                            setLinks(e.Links);
-                                                        }
-                                                    }}
-                                                >
-                                                    <Icon name="play-circle-outline" size={20} color="#0ff" style={{ marginRight: 3 }} />
-                                                    <Text
-                                                        style={styles.detail}
+                                            movie.Episodes
+                                                .sort((a, b) => {
+                                                    return parseInt(a.episode) - parseInt(b.episode);
+                                                })
+                                                .map((e) =>
+                                                    <TouchableOpacity
+                                                        style={[
+                                                            styles.epTouch,
+                                                            e.id == episodeActive ? styles.epActive : ''
+                                                        ]}
+                                                        key={e.id}
+                                                        onPress={() => {
+                                                            if (e.hls == source) {
+                                                                Alert.alert(null, "Bạn đã chọn !!!");
+                                                            } else {
+                                                                setSource(e.hls);
+                                                                setEpisodeActive(e.id);
+                                                                setLinks(e.Links);
+                                                            }
+                                                        }}
                                                     >
-                                                        Tập {e.episode}
-                                                    </Text>
+                                                        <Icon name="play-circle-outline" size={20} color="#0ff" style={{ marginRight: 3 }} />
+                                                        <Text
+                                                            style={styles.detail}
+                                                        >
+                                                            Tập {e.episode}
+                                                        </Text>
 
-                                                </TouchableOpacity>
-                                            )
+                                                    </TouchableOpacity>
+                                                )
                                         }
                                     </ScrollView>
                                 </View>
@@ -468,7 +446,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         borderRadius: 10,
     },
-    blockWrap: { paddingHorizontal: 10, marginTop: 10, },
+    blockWrap: { paddingHorizontal: 10, marginTop: 18, },
     blockHeaderWrap: { borderColor: "gray", borderBottomWidth: 2, flexDirection: 'row', },
     blockHeader: {
         color: "#fff",

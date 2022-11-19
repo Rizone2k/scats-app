@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
         fontSize: 35,
         lineHeight: 45,
         textTransform: 'uppercase',
-        fontFamily: 'Montserrat'
+        fontFamily: 'MontserratBold'
     },
     formInput: {
         width: "100%",

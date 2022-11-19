@@ -141,7 +141,14 @@ const DrawerContent = (props) => {
                             }}
                         >
                             {
-                                genre.map((e, index) => <List.Item titleStyle={styles.listItem} title={e.name} key={e.id} />)
+                                genre.map((e, index) =>
+                                    <List.Item
+                                        onPress={() => props.navigation.navigate("FilterScreen")}
+                                        titleStyle={styles.listItem}
+                                        title={e.name}
+                                        key={e.id}
+                                    />
+                                )
                             }
                         </List.Accordion>
                         <List.Accordion
@@ -156,7 +163,14 @@ const DrawerContent = (props) => {
                             }}
                         >
                             {
-                                year.map((e, index) => <List.Item titleStyle={styles.listItem} title={e.name} key={e.id} />)
+                                year.map((e, index) =>
+                                    <List.Item
+                                        onPress={() => props.navigation.navigate("FilterScreen")}
+                                        titleStyle={styles.listItem}
+                                        title={e.name}
+                                        key={e.id}
+                                    />
+                                )
                             }
                         </List.Accordion>
                         <List.Accordion
@@ -171,7 +185,14 @@ const DrawerContent = (props) => {
                             }}
                         >
                             {
-                                country.map((e, index) => <List.Item titleStyle={styles.listItem} title={e.name} key={e.id} />)
+                                country.map((e, index) =>
+                                    <List.Item
+                                        onPress={() => props.navigation.navigate("FilterScreen")}
+                                        titleStyle={styles.listItem}
+                                        title={e.name}
+                                        key={e.id}
+                                    />
+                                )
                             }
                         </List.Accordion>
                     </List.AccordionGroup>
