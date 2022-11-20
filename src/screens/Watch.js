@@ -35,7 +35,7 @@ const Watch = ({ route, navigation }) => {
     const [showMore, setShowMore] = useState(false);
     const [links, setLinks] = useState([]);
     const [iframe, setIframe] = useState(false);
-    const [fullScreen, setFullScreen] = useState(false);
+    const [isFullScreen, setIsFullScreen] = useState(false);
 
     const onTextLayout = useCallback(e => {
         setShowMore(e.nativeEvent.lines.length > numOfLine);
@@ -247,16 +247,14 @@ const Watch = ({ route, navigation }) => {
                                                                 source={{
                                                                     uri: source,
                                                                 }}
+                                                                onError={(err) => {
+                                                                    Alert.alert(null, "Không thể tải được video !!!");
+                                                                }}
                                                                 useNativeControls
                                                                 onFullscreenUpdate={(e) => {
-                                                                    if (e.fullscreenUpdate == 1) {
-                                                                        setFullScreen(!fullScreen);
-                                                                        console.log({ action: "fullscreen", fullScreen });
-                                                                    }
-                                                                    if (e.fullscreenUpdate == 3) {
-                                                                        setFullScreen(!fullScreen);
-                                                                        console.log({ action: "not fullscreen", fullScreen });
-                                                                    }
+                                                                    console.log(e.fullscreenUpdate == 1);
+                                                                    setIsFullScreen(e.fullscreenUpdate == 1 ? true : false);
+                                                                    // console.log(isFullScreen);
                                                                 }}
                                                                 resizeMode="contain"
                                                             />

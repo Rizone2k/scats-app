@@ -2,7 +2,7 @@ import instance from "./axios.config";
 
 const searchMovie = async (key) => {
     try {
-        const res = await instance.get(`/movie/search?key=${key}`);
+        const res = await instance.get(`/movie/search?${key}`);
         if (res.status == 200) {
             const resutl = res.data;
             return resutl;

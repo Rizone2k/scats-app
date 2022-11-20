@@ -72,7 +72,7 @@ const DrawerContent = (props) => {
         <View style={styles.container}>
             <DrawerContentScrollView {...props}>
                 <View style={styles.logoConainer}>
-                    <Image source={require('../images/logo-2.png')} style={styles.logoImage} />
+                    <Image source={require('../images/logo.png')} style={styles.logoImage} />
                 </View>
                 <Drawer.Section style={{ justifyContent: "center", alignItems: "center", marginTop: 10 }}>
                     <View style={styles.authSection}>
