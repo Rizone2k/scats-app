@@ -1,15 +1,16 @@
 import instance from "./axios.config";
 
-const getYear = async () => {
+const register = async (username, password) => {
     try {
-        const res = await instance.get(`/year`);
+        const res = await instance.post(`/auth/register`, { username, password });
         if (res.status == 200) {
             const result = res.data;
             return result;
         }
     } catch (error) {
+        console.log(error);
         throw error;
     }
 }
 
-export default getYear;
+export default register;

@@ -1,13 +1,58 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+    Dimensions,
+    Alert
+} from 'react-native';
 import { TextInput, Button, Title } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Header from '../components/Header';
+import register from '../api/register';
+
 
 const { width, heigth } = Dimensions.get('window');
 
 const Auth = () => {
     const [isLogin, setIsLogin] = useState(true);
+    const [usernameRegister, setUsernameRegister] = useState('');
+    const [passwordRegister, setPasswordRegister] = useState('');
+
+    const [regUsernameValidate, setRegUsernameValidate] = useState(false);
+    const [regPassValidate, setRegPassValidate] = useState(false);
+    const [regRePassValidate, setRegRePassValidate] = useState(false);
+    const validatePassword = (text) => {
+        setPasswordRegister(text);
+        if (text.length >= 6) {
+            setRegPassValidate(true);
+        } else {
+            setRegPassValidate(false);
+        }
+    }
+    const validateRePassword = (text) => {
+        if (text.length >= 6 && text == passwordRegister) {
+            setRegRePassValidate(true);
+        } else {
+            setRegRePassValidate(false);
+        }
+    }
+    const validateUsername = (text) => {
+        setUsernameRegister(text);
+        if (text.length >= 6) {
+            setRegUsernameValidate(true);
+        } else {
+            setRegUsernameValidate(false);
+        }
+    }
+
+    const handleRegister = () => {
+        if (regUsernameValidate && regPassValidate && regRePassValidate) {
+            console.log("send request")
+        }
+    }
+
     return (
         <View style={styles.container}>
             <Header allowBack={true}></Header>
@@ -43,32 +88,53 @@ const Auth = () => {
                         <Title style={styles.formTitle}>Đăng ký</Title>
                         <TextInput
                             style={styles.formInput}
+                            theme={{ colors: { primary: regUsernameValidate ? 'green' : 'red' } }}
                             mode="outlined"
+                            error={!regUsernameValidate}
+                            outlineColor={regUsernameValidate ? 'green' : ''}
+                            activeOutlineColor={regUsernameValidate ? 'green' : ''}
                             label={<Text style={{ fontFamily: 'Montserrat' }}>Tên Đăng Nhập</Text>}
+                            onChangeText={(text) => {
+                                validateUsername(text);
+                            }}
                             placeholder="Nhập tên đăng nhập"
                         />
                         <TextInput
                             style={styles.formInput}
+                            theme={{ colors: { primary: regPassValidate ? 'green' : 'red' } }}
                             mode="outlined"
+                            error={!regPassValidate}
+                            outlineColor={regPassValidate ? 'green' : ''}
+                            activeOutlineColor={regPassValidate ? 'green' : ''}
                             label={<Text style={{ fontFamily: 'Montserrat' }}>Mật Khẩu</Text>}
                             secureTextEntry
+                            onChangeText={(text) => {
+                                validatePassword(text);
+                            }}
                             placeholder="Mật khẩu"
                             right={<TextInput.Icon name="eye-outline" />}
                         />
                         <TextInput
                             style={styles.formInput}
+                            theme={{ colors: { primary: regRePassValidate ? 'green' : 'red' } }}
+                            error={!regRePassValidate}
+                            outlineColor={regRePassValidate ? 'green' : ''}
+                            activeOutlineColor={regRePassValidate ? 'green' : ''}
                             mode="outlined"
                             label={<Text style={{ fontFamily: 'Montserrat' }}>Nhập Lại Mật Khẩu</Text>}
                             secureTextEntry
+                            onChangeText={(text) => {
+                                validateRePassword(text);
+                            }}
                             placeholder="Nhập lại mật khẩu"
-                            right={<TextInput.Icon name="eye-outline" />}
+                            right={<TextInput.Icon name="eye-outline" onPress={() => { console.log("123") }} />}
                         />
                         <Button
                             style={styles.formBtn}
                             labelStyle={{ fontFamily: 'Montserrat' }}
                             mode="contained"
                             uppercase={false}
-                            onPress={() => console.log('Register')}
+                            onPress={handleRegister}
                         >
                             Đăng ký
                         </Button>

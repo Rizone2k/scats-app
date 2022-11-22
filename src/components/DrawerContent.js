@@ -1,68 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Image, View } from 'react-native';
+import { StyleSheet, Image, View, Alert } from 'react-native';
 import { Drawer, Text, Button, List } from 'react-native-paper';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
+import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
-import getCountry from '../api/getCountry';
-import getGenre from '../api/getGenre';
-import getYear from '../api/getYear';
+import { genresSelector, yearsSelector, countriesSelector } from '../redux/selectors';
+import { getGenres } from '../redux/reducers/genre';
+import { getYears } from '../redux/reducers/year';
+import { getCountries } from '../redux/reducers/country';
 
 const DrawerContent = (props) => {
 
-    const [genre, setGenre] = useState([]);
-    const [country, setCountry] = useState([]);
-    const [year, setYear] = useState([]);
-
-    const callApiYear = async () => {
-        try {
-            const rs = await getYear();
-            if (rs.status == "success") {
-                if (rs.data != null) {
-                    setYear(rs.data);
-                }
-            } else {
-                alert(rs.message);
-            }
-        } catch (error) {
-            alert("Error !!!");
-        }
-    }
-
-    const callApiGenre = async () => {
-        try {
-            const rs = await getGenre();
-            if (rs.status == "success") {
-                if (rs.data != null) {
-                    setGenre(rs.data);
-                }
-            } else {
-                alert(rs.message);
-            }
-        } catch (error) {
-            alert("Error !!!");
-        }
-    }
-
-    const callApiCountry = async () => {
-        try {
-            const rs = await getCountry();
-            if (rs.status == "success") {
-                if (rs.data != null) {
-                    setCountry(rs.data);
-                }
-            } else {
-                alert(rs.message);
-            }
-        } catch (error) {
-            alert("Error !!!");
-        }
-    }
+    const dispatch = useDispatch();
+    const genres = useSelector(genresSelector);
+    const years = useSelector(yearsSelector);
+    const countries = useSelector(countriesSelector);
 
     useEffect(() => {
         console.log("Drawer Mount");
-        callApiYear();
-        callApiCountry();
-        callApiGenre();
+        dispatch(getGenres());
+        dispatch(getYears());
+        dispatch(getCountries());
         return () => {
             console.log("Drawer Unmount");
         }
@@ -141,7 +99,7 @@ const DrawerContent = (props) => {
                             }}
                         >
                             {
-                                genre.map((e, index) =>
+                                genres.map((e, index) =>
                                     <List.Item
                                         onPress={() => props.navigation.navigate("FilterScreen")}
                                         titleStyle={styles.listItem}
@@ -163,7 +121,7 @@ const DrawerContent = (props) => {
                             }}
                         >
                             {
-                                year.map((e, index) =>
+                                years.map((e, index) =>
                                     <List.Item
                                         onPress={() => props.navigation.navigate("FilterScreen")}
                                         titleStyle={styles.listItem}
@@ -185,7 +143,7 @@ const DrawerContent = (props) => {
                             }}
                         >
                             {
-                                country.map((e, index) =>
+                                countries.map((e, index) =>
                                     <List.Item
                                         onPress={() => props.navigation.navigate("FilterScreen")}
                                         titleStyle={styles.listItem}

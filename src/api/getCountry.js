@@ -4,8 +4,8 @@ const getCountry = async () => {
     try {
         const res = await instance.get(`/country`);
         if (res.status == 200) {
-            const resutl = res.data;
-            return resutl;
+            const result = res.data;
+            return result;
         }
     } catch (error) {
         throw error;

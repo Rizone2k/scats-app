@@ -4,8 +4,8 @@ const searchMovie = async (key) => {
     try {
         const res = await instance.get(`/movie/search?${key}`);
         if (res.status == 200) {
-            const resutl = res.data;
-            return resutl;
+            const result = res.data;
+            return result;
         }
     } catch (error) {
         throw error;

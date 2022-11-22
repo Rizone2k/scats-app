@@ -4,8 +4,8 @@ const getMovie = async (id) => {
     try {
         const res = await instance.get(`/movie/${id}`);
         if (res.status == 200) {
-            const resutl = res.data;
-            return resutl;
+            const result = res.data;
+            return result;
         }
     } catch (error) {
         throw error;

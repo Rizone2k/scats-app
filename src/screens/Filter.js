@@ -18,15 +18,17 @@ import getYear from '../api/getYear';
 import filterMovie from '../api/filterMovie';
 import CardVertical from '../components/CardVertical';
 import Pagination from '../components/Pagination';
+import { useDispatch, useSelector } from 'react-redux';
+import { genresSelector, yearsSelector, countriesSelector } from '../redux/selectors';
 
 const { width, height } = Dimensions.get("window");
 
 const Filter = () => {
 
+    const genres = useSelector(genresSelector);
+    const years = useSelector(yearsSelector);
+    const countries = useSelector(countriesSelector);
     const [arrMovie, setArrMovie] = useState([]);
-    const [genre, setGenre] = useState([]);
-    const [country, setCountry] = useState([]);
-    const [year, setYear] = useState([]);
     const [genresCheck, setGenresCheck] = useState([]);
     const [genresOpen, setGenresOpen] = useState(false);
     const [countryCheck, setCountryCheck] = useState(null);
@@ -39,51 +41,6 @@ const Filter = () => {
         limit: 21,
         total: 1
     });
-
-    const callApiYear = async () => {
-        try {
-            const rs = await getYear();
-            if (rs.status == "success") {
-                if (rs.data != null) {
-                    setYear(rs.data);
-                }
-            } else {
-                Alert.alert(null, rs.message);
-            }
-        } catch (error) {
-            Alert.alert(null, "Error !!!");
-        }
-    }
-
-    const callApiGenre = async () => {
-        try {
-            const rs = await getGenre();
-            if (rs.status == "success") {
-                if (rs.data != null) {
-                    setGenre(rs.data);
-                }
-            } else {
-                Alert.alert(null, rs.message);
-            }
-        } catch (error) {
-            Alert.alert(null, "Error !!!");
-        }
-    }
-
-    const callApiCountry = async () => {
-        try {
-            const rs = await getCountry();
-            if (rs.status == "success") {
-                if (rs.data != null) {
-                    setCountry(rs.data);
-                }
-            } else {
-                Alert.alert(null, rs.message);
-            }
-        } catch (error) {
-            Alert.alert(null, "Error !!!");
-        }
-    }
 
     const callApiFilter = async (page) => {
         try {
@@ -117,9 +74,6 @@ const Filter = () => {
     }
 
     useEffect(() => {
-        callApiYear();
-        callApiCountry();
-        callApiGenre();
         return () => {
         }
     }, []);
@@ -165,7 +119,7 @@ const Filter = () => {
                         </TouchableOpacity>
                         <View style={[styles.blockContent, genresOpen ? { display: "flex" } : { display: "none" }]}>
                             {
-                                genre.map((e) =>
+                                genres.map((e) =>
                                     <Checkbox.Item
                                         status={genresCheck.includes(e.id) ? "checked" : "unchecked"}
                                         style={{ width: (width / 3) - 10 }}
@@ -226,7 +180,7 @@ const Filter = () => {
                             }
                         >
                             {
-                                country.map((e) =>
+                                countries.map((e) =>
                                     <RadioButton.Item
                                         status={countryCheck == e.id ? "checked" : "unchecked"}
                                         style={{ width: (width / 3) - 10 }}
@@ -280,7 +234,7 @@ const Filter = () => {
                         </TouchableOpacity>
                         <View style={[styles.blockContent, yearsOpen ? { display: "flex" } : { display: "none" }]}>
                             {
-                                year.map((e) =>
+                                years.map((e) =>
                                     <RadioButton.Item
                                         status={yearCheck == e.id ? "checked" : "unchecked"}
                                         style={{ width: (width / 3) - 10 }}
