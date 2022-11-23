@@ -73,7 +73,7 @@ const Watch = ({ route, navigation }) => {
             {movie !== null ? (
                 <View style={{}}>
                     <ScrollView
-                        style={{}}
+                        showsVerticalScrollIndicator={false}
                         nestedScrollEnabled={true}
                         contentContainerStyle={styles.scrollView}
                         refreshControl={

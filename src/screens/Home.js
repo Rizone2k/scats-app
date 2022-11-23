@@ -6,11 +6,15 @@ import {
     ScrollView,
     RefreshControl,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { unwrapResult } from '@reduxjs/toolkit';
+import * as SecureStore from 'expo-secure-store';
 import Header from '../components/Header';
 import Slide from '../components/SlideBanner/Slide';
 import NewMovie from '../components/NewMovie';
 import TopLike from '../components/TopLikeMovie';
 import TopView from '../components/TopViewMovie';
+import { refreshToken } from '../redux/reducers/auth';
 
 const { width, height } = Dimensions.get("window");
 
@@ -19,6 +23,7 @@ const wait = (timeout) => {
 }
 
 const Home = ({ navigation }) => {
+    const dispatch = useDispatch();
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -27,8 +32,20 @@ const Home = ({ navigation }) => {
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
+    const checkLoggedIn = async () => {
+        const token = await SecureStore.getItemAsync('access_token');
+        if (token) {
+            console.log("refresh token");
+            dispatch(refreshToken())
+                .then(unwrapResult)
+                .then(rs => console.log(rs))
+                .catch(err => console.log(err));
+        }
+    }
+
     useEffect(() => {
         console.log("Home screen Mount");
+        checkLoggedIn();
         return () => {
             console.log("Home screen Unmount");
         }
@@ -40,6 +57,7 @@ const Home = ({ navigation }) => {
             <ScrollView
                 nestedScrollEnabled
                 contentContainerStyle={styles.scrollView}
+                showsVerticalScrollIndicator={false}
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}

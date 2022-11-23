@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Image, View, Alert } from 'react-native';
+import { StyleSheet, Image, View, ToastAndroid } from 'react-native';
 import { Drawer, Text, Button, List } from 'react-native-paper';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { useDispatch, useSelector } from 'react-redux';
+import { StackActions } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { genresSelector, yearsSelector, countriesSelector } from '../redux/selectors';
+import {
+    genresSelector,
+    yearsSelector,
+    countriesSelector,
+    isLoggedInSelector,
+    curentUserSelector
+} from '../redux/selectors';
+import { unwrapResult } from '@reduxjs/toolkit';
 import { getGenres } from '../redux/reducers/genre';
 import { getYears } from '../redux/reducers/year';
 import { getCountries } from '../redux/reducers/country';
+import { logout } from '../redux/reducers/auth';
 
 const DrawerContent = (props) => {
 
@@ -15,6 +24,17 @@ const DrawerContent = (props) => {
     const genres = useSelector(genresSelector);
     const years = useSelector(yearsSelector);
     const countries = useSelector(countriesSelector);
+    const isLoggedIn = useSelector(isLoggedInSelector);
+    const curentUser = useSelector(curentUserSelector);
+
+    const handleLogout = () => {
+        dispatch(logout())
+            .then(unwrapResult)
+            .then(() => {
+                props.navigation.navigate("Home");
+            })
+            .catch((err) => ToastAndroid.show(err, ToastAndroid.SHORT));
+    }
 
     useEffect(() => {
         console.log("Drawer Mount");
@@ -34,25 +54,39 @@ const DrawerContent = (props) => {
                 </View>
                 <Drawer.Section style={{ justifyContent: "center", alignItems: "center", marginTop: 10 }}>
                     <View style={styles.authSection}>
-                        <Text style={{ color: "#fff", textAlign: "center", fontFamily: 'Montserrat' }}>
-                            Bạn chưa đăng nhập
-                        </Text>
-                        <View style={{ flexDirection: "row" }}>
-                            <Button
-                                style={styles.authBtn}
-                                labelStyle={{ fontFamily: 'Montserrat' }}
-                                icon={({ size, color }) => (
-                                    <Icon
-                                        name="log-in-outline" size={size} color={color}
-                                    />
-                                )}
-                                mode="contained"
-                                uppercase={false}
-                                onPress={() => props.navigation.navigate("AuthScreen")}
-                            >
-                                Đăng nhập
-                            </Button>
-                        </View>
+                        {
+                            isLoggedIn ?
+                                (
+                                    <View>
+                                        <Text style={{ color: "#fff", textAlign: "center", fontFamily: 'Montserrat' }}>
+                                            {curentUser.username}
+                                        </Text>
+                                    </View>
+                                ) :
+                                (
+                                    <View>
+                                        <Text style={{ color: "#fff", textAlign: "center", fontFamily: 'Montserrat' }}>
+                                            Bạn chưa đăng nhập
+                                        </Text>
+                                        <View style={{ flexDirection: "row" }}>
+                                            <Button
+                                                style={styles.authBtn}
+                                                labelStyle={{ fontFamily: 'Montserrat' }}
+                                                icon={({ size, color }) => (
+                                                    <Icon
+                                                        name="log-in-outline" size={size} color={color}
+                                                    />
+                                                )}
+                                                mode="contained"
+                                                uppercase={false}
+                                                onPress={() => props.navigation.navigate("AuthScreen")}
+                                            >
+                                                Đăng nhập
+                                            </Button>
+                                        </View>
+                                    </View>
+                                )
+                        }
                     </View>
                 </Drawer.Section>
                 <Drawer.Section style={styles.drawerSection} >
@@ -66,7 +100,7 @@ const DrawerContent = (props) => {
                             return <Text style={styles.drawerTitle}>Trang Chủ</Text>
                         }}
                         onPress={() => {
-
+                            props.navigation.navigate('HomeScreen');
                         }}
                     />
                 </Drawer.Section>
@@ -81,7 +115,7 @@ const DrawerContent = (props) => {
                             return <Text style={styles.drawerTitle}>Tìm Kiếm</Text>
                         }}
                         onPress={() => {
-
+                            props.navigation.navigate("Search");
                         }}
                     />
                 </Drawer.Section>
@@ -155,6 +189,27 @@ const DrawerContent = (props) => {
                         </List.Accordion>
                     </List.AccordionGroup>
                 </Drawer.Section>
+                <View style={{ justifyContent: "center", alignItems: "center" }}>
+                    <View style={styles.authSection}></View>
+                </View>
+                {
+                    isLoggedIn ?
+                        (
+                            <Drawer.Section style={styles.drawerSection} >
+                                <DrawerItem
+                                    icon={({ size, color }) => (
+                                        <Icon
+                                            name="log-out-outline" size={size} color="#fff"
+                                        />
+                                    )}
+                                    label={() => {
+                                        return <Text style={styles.drawerTitle}>Đăng xuất</Text>
+                                    }}
+                                    onPress={handleLogout}
+                                />
+                            </Drawer.Section>
+                        ) : ('')
+                }
             </DrawerContentScrollView>
         </View>
     )

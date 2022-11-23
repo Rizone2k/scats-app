@@ -5,24 +5,36 @@ import {
     View,
     TouchableOpacity,
     Dimensions,
-    Alert
+    Alert,
+    ToastAndroid
 } from 'react-native';
+import { StackActions, useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { unwrapResult } from '@reduxjs/toolkit';
 import { TextInput, Button, Title } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Header from '../components/Header';
 import register from '../api/register';
+import { login } from '../redux/reducers/auth';
 
 
 const { width, heigth } = Dimensions.get('window');
 
 const Auth = () => {
+    const navigation = useNavigation();
+    const dispatch = useDispatch();
     const [isLogin, setIsLogin] = useState(true);
+
+    const [usernameLogin, setUsernameLogin] = useState('');
+    const [passwordLogin, setPasswordLogin] = useState('');
+
     const [usernameRegister, setUsernameRegister] = useState('');
     const [passwordRegister, setPasswordRegister] = useState('');
 
     const [regUsernameValidate, setRegUsernameValidate] = useState(false);
     const [regPassValidate, setRegPassValidate] = useState(false);
     const [regRePassValidate, setRegRePassValidate] = useState(false);
+
     const validatePassword = (text) => {
         setPasswordRegister(text);
         if (text.length >= 6) {
@@ -53,6 +65,22 @@ const Auth = () => {
         }
     }
 
+    const handleLogin = () => {
+        if (usernameLogin.length != 0 && passwordLogin.length != 0) {
+            dispatch(login({ username: usernameLogin, password: passwordLogin }))
+                .then(unwrapResult)
+                .then((result) => {
+                    ToastAndroid.show("Đăng nhập thành công", ToastAndroid.SHORT);
+                    navigation.dispatch(StackActions.popToTop());
+                }).catch((err) => {
+                    ToastAndroid.show(err, ToastAndroid.SHORT);
+                    // Alert.alert(null, err);
+                });
+        } else {
+            ToastAndroid.show("Vui lòng nhập đầy đủ thông tin", ToastAndroid.SHORT);
+        }
+    }
+
     return (
         <View style={styles.container}>
             <Header allowBack={true}></Header>
@@ -64,6 +92,9 @@ const Auth = () => {
                             style={styles.formInput}
                             mode="outlined"
                             label={<Text style={{ fontFamily: 'Montserrat' }}>Tên Đăng Nhập</Text>}
+                            onChangeText={(text) => {
+                                setUsernameLogin(text);
+                            }}
                             placeholder="Nhập tên đăng nhập"
                         />
                         <TextInput
@@ -72,6 +103,9 @@ const Auth = () => {
                             label={<Text style={{ fontFamily: 'Montserrat' }}>Mật Khẩu</Text>}
                             secureTextEntry
                             placeholder="Nhập mật khẩu"
+                            onChangeText={(text) => {
+                                setPasswordLogin(text);
+                            }}
                             right={<TextInput.Icon name="eye-outline" />}
                         />
                         <Button
@@ -79,7 +113,7 @@ const Auth = () => {
                             labelStyle={{ fontFamily: 'Montserrat' }}
                             mode="contained"
                             uppercase={false}
-                            onPress={() => console.log('Login')}
+                            onPress={handleLogin}
                         >
                             Đăng nhập
                         </Button>
