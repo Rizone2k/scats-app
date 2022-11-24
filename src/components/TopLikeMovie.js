@@ -69,12 +69,11 @@ const styles = StyleSheet.create({
     blockHeader: {
         color: "#fff",
         fontSize: 18,
-        fontWeight: "bold",
         flexShrink: 1,
         backgroundColor: "#5a5454",
         position: "absolute",
         top: 0,
         paddingRight: 3,
-        fontFamily: 'Montserrat'
+        fontFamily: 'MontserratBold'
     },
 })

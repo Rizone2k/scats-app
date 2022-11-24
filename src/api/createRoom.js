@@ -1,8 +1,8 @@
 import instance from "../configs/axios.config";
 
-const getBanner = async () => {
+const createRoom = async (data) => {
     try {
-        const res = await instance.get(`/movie/banner`);
+        const res = await instance.post(`/room`, data);
         if (res.status == 200) {
             const result = res.data;
             return result;
@@ -12,4 +12,4 @@ const getBanner = async () => {
     }
 }
 
-export default getBanner;
+export default createRoom;

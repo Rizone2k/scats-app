@@ -5,7 +5,6 @@ import {
     View,
     TouchableOpacity,
     Dimensions,
-    Alert,
     ToastAndroid
 } from 'react-native';
 import { StackActions, useNavigation } from '@react-navigation/native';
@@ -59,9 +58,19 @@ const Auth = () => {
         }
     }
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
         if (regUsernameValidate && regPassValidate && regRePassValidate) {
-            console.log("send request")
+            const rs = await register(usernameRegister, passwordRegister);
+            if (rs.status == "success") {
+                setUsernameRegister('');
+                setPasswordRegister('');
+                ToastAndroid.show("Đăng ký thành công", ToastAndroid.SHORT);
+                setIsLogin(true);
+            } else {
+                ToastAndroid.show(rs.message, ToastAndroid.SHORT);
+            }
+        } else {
+            ToastAndroid.show("Lỗi", ToastAndroid.SHORT);
         }
     }
 
@@ -70,11 +79,12 @@ const Auth = () => {
             dispatch(login({ username: usernameLogin, password: passwordLogin }))
                 .then(unwrapResult)
                 .then((result) => {
+                    setUsernameLogin('');
+                    setPasswordLogin('');
                     ToastAndroid.show("Đăng nhập thành công", ToastAndroid.SHORT);
                     navigation.dispatch(StackActions.popToTop());
                 }).catch((err) => {
                     ToastAndroid.show(err, ToastAndroid.SHORT);
-                    // Alert.alert(null, err);
                 });
         } else {
             ToastAndroid.show("Vui lòng nhập đầy đủ thông tin", ToastAndroid.SHORT);

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as SecureStore from 'expo-secure-store';
-import instance from '../../api/axios.config';
+import instance from '../../configs/axios.config';
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
@@ -49,7 +49,6 @@ export const login = createAsyncThunk('auth/login', async ({ username, password 
             }
         }
     } catch (error) {
-        // console.log(error)
         if (error.payload) {
             throw rejectWithValue(error.payload);
         } else {

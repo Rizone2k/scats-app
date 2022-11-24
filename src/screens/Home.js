@@ -35,11 +35,9 @@ const Home = ({ navigation }) => {
     const checkLoggedIn = async () => {
         const token = await SecureStore.getItemAsync('access_token');
         if (token) {
-            console.log("refresh token");
             dispatch(refreshToken())
                 .then(unwrapResult)
-                .then(rs => console.log(rs))
-                .catch(err => console.log(err));
+            // .catch(err => console.log(err));
         }
     }
 
@@ -88,4 +86,4 @@ const styles = StyleSheet.create({
     scrollView: {
     },
 });
-export default Home
+export default Home;

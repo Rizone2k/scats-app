@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import instance from '../../api/axios.config';
+import instance from '../../configs/axios.config';
 const yearsSlice = createSlice({
     name: 'years',
     initialState: { status: 'idle', data: [] },

@@ -431,7 +431,7 @@ const styles = StyleSheet.create({
         position: "absolute",
         zIndex: 100,
     },
-    title: { color: "#fff", fontSize: 18, fontWeight: "bold", fontFamily: 'Montserrat' },
+    title: { color: "#fff", fontSize: 18, fontFamily: 'MontserratBold' },
     detailWrap: { flexDirection: "row", marginVertical: 2 },
     detail: { color: "#fff", fontSize: 14, fontFamily: 'Montserrat' },
     reactionWrap: { flexDirection: "row", marginRight: 20 },
@@ -449,13 +449,12 @@ const styles = StyleSheet.create({
     blockHeader: {
         color: "#fff",
         fontSize: 18,
-        fontWeight: "bold",
         flexShrink: 1,
         backgroundColor: "#5a5454",
         position: "absolute",
         top: 0,
         paddingRight: 3,
-        fontFamily: 'Montserrat'
+        fontFamily: 'MontserratBold'
     },
     showMore: {
         fontFamily: 'Montserrat',

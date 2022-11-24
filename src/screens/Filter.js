@@ -318,7 +318,6 @@ const styles = StyleSheet.create({
     blockHeader: {
         color: "#fff",
         fontSize: 15,
-        fontWeight: "bold",
         flexShrink: 1,
         backgroundColor: "#5a5454",
         position: "absolute",

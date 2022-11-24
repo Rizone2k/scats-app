@@ -1,4 +1,4 @@
-import instance from "./axios.config";
+import instance from "../configs/axios.config";
 
 const searchMovie = async (key) => {
     try {

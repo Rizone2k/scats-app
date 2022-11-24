@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 1,
         shadowRadius: 3,
         marginBottom: 5,
-        fontWeight: "bold",
     },
     itemView: {
         fontFamily: 'Montserrat',
