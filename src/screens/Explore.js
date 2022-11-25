@@ -101,12 +101,14 @@ const Explore = () => {
 
     useEffect(() => {
         console.log("Explore screen Mount");
-        callApiGetMyRoom();
-        callApiGetRoomLive();
+        if (isLoggedIn) {
+            callApiGetMyRoom();
+            callApiGetRoomLive();
+        }
         return () => {
             console.log("Explore screen Unmount");
         }
-    }, []);
+    }, [isLoggedIn]);
 
     return (
         <View style={styles.container}>

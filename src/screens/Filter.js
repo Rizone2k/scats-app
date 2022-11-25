@@ -82,6 +82,7 @@ const Filter = () => {
         <View style={styles.container}>
             <Header allowBack={true} />
             <ScrollView
+                showsHorizontalScrollIndicator={false}
                 nestedScrollEnabled
                 style={{ marginTop: 5 }}
             >

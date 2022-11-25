@@ -48,6 +48,7 @@ const TopView = () => {
 
                     <FlatList
                         nestedScrollEnabled
+                        showsHorizontalScrollIndicator={false}
                         horizontal
                         data={arrMovie}
                         renderItem={({ item }) =>

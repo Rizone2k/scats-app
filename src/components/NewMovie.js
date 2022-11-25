@@ -47,6 +47,7 @@ const NewMovie = () => {
                 <View style={{}}>
 
                     <FlatList
+                        showsHorizontalScrollIndicator={false}
                         nestedScrollEnabled
                         horizontal
                         data={arrMovie}
