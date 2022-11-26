@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
     View,
     Text,
@@ -23,10 +23,11 @@ import {
     isLoggedInSelector,
     curentUserSelector
 } from '../redux/selectors';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import createRoom from '../api/createRoom';
 import getMyRoom from '../api/getMyRoom';
 import getRoomLive from '../api/getRoomLive';
+
 
 const { width, height } = Dimensions.get("window");
 
@@ -99,16 +100,14 @@ const Explore = () => {
         }
     }
 
-    useEffect(() => {
-        console.log("Explore screen Mount");
-        if (isLoggedIn) {
-            callApiGetMyRoom();
-            callApiGetRoomLive();
-        }
-        return () => {
-            console.log("Explore screen Unmount");
-        }
-    }, [isLoggedIn]);
+    useFocusEffect(
+        useCallback(() => {
+            if (isLoggedIn) {
+                callApiGetMyRoom();
+                callApiGetRoomLive();
+            }
+        }, [isLoggedIn])
+    );
 
     return (
         <View style={styles.container}>
@@ -133,7 +132,7 @@ const Explore = () => {
                                 <Modal
                                     visible={visibleCreateRoomModal}
                                     onDismiss={() => setVisibleCreateRoomModal(false)}
-                                    contentContainerStyle={styles.containerStyle}
+                                    contentContainerStyle={styles.modal}
                                 >
                                     <View>
                                         <Text
@@ -327,7 +326,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#5a5454',
     },
-    containerStyle: { backgroundColor: 'gray', padding: 10, marginHorizontal: 10 },
+    modal: { backgroundColor: 'gray', padding: 10, marginHorizontal: 10 },
     scrollView: {
     },
     blockWrap: { paddingHorizontal: 10, marginTop: 10, },

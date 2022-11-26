@@ -37,12 +37,10 @@ const DrawerContent = (props) => {
     }
 
     useEffect(() => {
-        console.log("Drawer Mount");
         dispatch(getGenres());
         dispatch(getYears());
         dispatch(getCountries());
         return () => {
-            console.log("Drawer Unmount");
         }
     }, []);
 
@@ -57,10 +55,35 @@ const DrawerContent = (props) => {
                         {
                             isLoggedIn ?
                                 (
-                                    <View>
-                                        <Text style={{ color: "#fff", textAlign: "center", fontFamily: 'Montserrat' }}>
-                                            {curentUser.username}
-                                        </Text>
+                                    <View
+                                        style={{
+                                            flexDirection: "row",
+                                            flexWrap: "wrap"
+                                        }}
+                                    >
+                                        <Image
+                                            source={{ uri: curentUser.avatar }}
+                                            style={{
+                                                width: 50,
+                                                height: 50,
+                                                resizeMode: "contain",
+                                                borderRadius: 100,
+
+                                            }}
+                                        />
+                                        <View
+                                            style={{
+                                                paddingHorizontal: 10,
+                                                justifyContent: "center"
+                                            }}
+                                        >
+                                            <Text style={{ color: "#fff", fontFamily: 'Montserrat', fontSize: 18 }}>
+                                                {curentUser.username}
+                                            </Text>
+                                            <Text style={{ color: "#fff", fontFamily: 'Montserrat', fontSize: 12 }}>
+                                                {curentUser.email}
+                                            </Text>
+                                        </View>
                                     </View>
                                 ) :
                                 (

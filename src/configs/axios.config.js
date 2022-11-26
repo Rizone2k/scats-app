@@ -15,7 +15,7 @@ instance.interceptors.request.use(
     async config => {
         config.headers['Access-Control-Allow-Origin'] = '*';
         config.headers['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE,PATCH,OPTIONS';
-        config.headers['Content-Type'] = 'application/json';
+        config.headers['Content-Type'] = 'multipart/form-data';
         const token = await SecureStore.getItemAsync('access_token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`

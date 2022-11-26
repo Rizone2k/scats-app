@@ -33,6 +33,9 @@ const authSlice = createSlice({
                 state.isLoggedIn = true;
                 state.curentUser = action.payload;
             })
+            .addCase(updateInfor.fulfilled, (state, action) => {
+                state.curentUser = action.payload;
+            })
     },
 });
 
@@ -87,6 +90,33 @@ export const refreshToken = createAsyncThunk('auth/refreshToken', async (_, { re
                 return res.data.data.user;
             } else {
                 await SecureStore.deleteItemAsync('access_token');
+                throw rejectWithValue(res.data.message);
+            }
+        }
+    } catch (error) {
+        if (error.payload) {
+            throw rejectWithValue(error.payload);
+        } else {
+            throw error;
+        }
+    }
+});
+
+export const updateInfor = createAsyncThunk('auth/updateInfor', async ({ id, username, email, avatar }, { rejectWithValue }) => {
+    try {
+        const formData = new FormData();
+        if (avatar) {
+            formData.append('avatar', avatar.base64);
+        }
+        formData.append('idUser', id);
+        formData.append('username', username);
+        formData.append('email', email);
+        const res = await instance.post(`/user/update`, formData);
+        if (res.status == 200) {
+            if (res.data.status == 'success') {
+                console.log(res.data.data)
+                return res.data.data;
+            } else {
                 throw rejectWithValue(res.data.message);
             }
         }

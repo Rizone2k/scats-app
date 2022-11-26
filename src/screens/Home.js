@@ -37,7 +37,7 @@ const Home = ({ navigation }) => {
         if (token) {
             dispatch(refreshToken())
                 .then(unwrapResult)
-            // .catch(err => console.log(err));
+                .catch(err => { });
         }
     }
 
