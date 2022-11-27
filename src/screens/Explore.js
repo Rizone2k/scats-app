@@ -6,7 +6,8 @@ import {
     Dimensions,
     ToastAndroid,
     TouchableOpacity,
-    FlatList
+    FlatList,
+    RefreshControl
 } from 'react-native';
 import {
     Button,
@@ -27,6 +28,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import createRoom from '../api/createRoom';
 import getMyRoom from '../api/getMyRoom';
 import getRoomLive from '../api/getRoomLive';
+import sendRoomPass from '../api/sendRoomPass';
 
 
 const { width, height } = Dimensions.get("window");
@@ -35,14 +37,24 @@ const Explore = () => {
     const navigation = useNavigation();
     const isLoggedIn = useSelector(isLoggedInSelector);
     const curentUser = useSelector(curentUserSelector);
+    const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        callApiGetRoomLive();
+        setRefreshing(false);
+    }, []);
 
     const [myRoom, setMyRoom] = useState({});
     const [roomsLive, setRoomsLive] = useState([]);
 
     const [visibleCreateRoomModal, setVisibleCreateRoomModal] = useState(false);
+    const [enterPassModal, setEnterPassModal] = useState(false);
     const [roomName, setRoomName] = useState(`Phòng của ${curentUser.username || ''}`);
     const [roomIsPrivate, setRoomIsPrivate] = useState(false);
     const [roomPass, setRoomPass] = useState('');
+    const [passEnter, setPassEnter] = useState('');
+    const [roomSelect, setroomSelect] = useState(null);
 
     const handleCreateRoomClick = async () => {
         try {
@@ -96,6 +108,31 @@ const Explore = () => {
                 ToastAndroid.show(rs.message, ToastAndroid.SHORT);
             }
         } catch (error) {
+            ToastAndroid.show("Lỗi", ToastAndroid.SHORT);
+        }
+    }
+
+    const handleJoinRoomClick = (id, isPrivate) => {
+        if (isPrivate == true) {
+            setroomSelect(id);
+            setEnterPassModal(true);
+        } else {
+            navigation.navigate("LiveScreen", { id });
+        }
+    }
+
+    const handleSendPassToJoin = async () => {
+        try {
+            const rs = await sendRoomPass({ id: roomSelect, pass: passEnter });
+            if (rs.status == "success") {
+                setEnterPassModal(false);
+                setPassEnter('');
+                navigation.navigate("LiveScreen", { id: roomSelect });
+            } else {
+                ToastAndroid.show(rs.message, ToastAndroid.SHORT);
+            }
+        } catch (error) {
+            console.log(error);
             ToastAndroid.show("Lỗi", ToastAndroid.SHORT);
         }
     }
@@ -204,6 +241,50 @@ const Explore = () => {
                                         </View>
                                     </View>
                                 </Modal>
+                                <Modal
+                                    visible={enterPassModal}
+                                    onDismiss={() => setEnterPassModal(false)}
+                                    contentContainerStyle={styles.modal}
+                                >
+                                    <View>
+                                        <Text
+                                            style={
+                                                {
+                                                    color: "#fff",
+                                                    fontFamily: 'MontserratBold',
+                                                    textAlign: "center",
+                                                    fontSize: 25,
+                                                    marginBottom: 10
+                                                }
+                                            }
+                                        >
+                                            Nhập mật khẩu
+                                        </Text>
+                                        <TextInput
+                                            style={{ width: "100%", marginVertical: 5, fontFamily: 'Montserrat' }}
+                                            mode="flat"
+                                            secureTextEntry
+                                            label={<Text style={{ fontFamily: 'Montserrat' }}>Mật khẩu phòng</Text>}
+                                            onChangeText={(text) => {
+                                                setPassEnter(text.trim().replace(' ', ''))
+                                            }}
+                                            value={passEnter}
+                                        />
+
+                                        <View style={{ alignItems: "center", marginTop: 10 }}>
+                                            <Button
+                                                style={{ width: width / 3 }}
+                                                icon={({ size, color }) => (
+                                                    <Icon name="add-outline" size={size} color="#fff" />
+                                                )}
+                                                mode="contained"
+                                                uppercase={false}
+                                                onPress={handleSendPassToJoin}>
+                                                Vào phòng
+                                            </Button>
+                                        </View>
+                                    </View>
+                                </Modal>
                             </Portal>
                             <View style={styles.blockWrap}>
                                 <View style={styles.blockHeaderWrap}>
@@ -261,7 +342,7 @@ const Explore = () => {
                                 </View>
                             </View>
 
-                            <View style={styles.blockWrap}>
+                            <View style={[styles.blockWrap, { flex: 1 }]}>
                                 <View style={styles.blockHeaderWrap}>
                                     <Text style={
                                         styles.blockHeader
@@ -271,8 +352,9 @@ const Explore = () => {
                                     </Text>
                                     <Text></Text>
                                 </View>
-                                <View style={{ marginTop: 5, padding: 5 }}>
+                                <View style={{ marginTop: 5, padding: 5, flex: 1, }}>
                                     <FlatList
+                                        style={{ flex: 1 }}
                                         nestedScrollEnabled
                                         horizontal={false}
                                         numColumns={2}
@@ -281,16 +363,15 @@ const Explore = () => {
                                             <TouchableOpacity
                                                 style={{
                                                     width: (width / 2) - 25,
-                                                    paddingHorizontal: 10,
+                                                    paddingLeft: 10,
                                                     paddingVertical: 15,
+                                                    paddingRight: 20,
                                                     borderWidth: 1,
                                                     borderColor: "gray",
                                                     borderRadius: 10,
                                                     margin: 5
                                                 }}
-                                                onPress={() => {
-                                                    navigation.navigate("LiveScreen", { id: item.id });
-                                                }}
+                                                onPress={() => handleJoinRoomClick(item.id, item.private)}
                                             >
                                                 <Text
                                                     style={{ color: "#fff", fontFamily: "Montserrat", }}
@@ -298,10 +379,34 @@ const Explore = () => {
                                                 >
                                                     {item.name}
                                                 </Text>
+                                                <Text
+                                                    style={[
+                                                        {
+                                                            position: "absolute",
+                                                            top: 5,
+                                                            right: 5,
+                                                            fontFamily: "MontserratBold",
+                                                            color: "#fff",
+                                                            fontSize: 10,
+                                                            padding: 3,
+                                                            borderRadius: 5
+                                                        },
+                                                        item.private ?
+                                                            { backgroundColor: "red", } :
+                                                            { backgroundColor: "green", }
+                                                    ]}
+                                                >
+                                                    {item.private ? "private" : "public"}
+                                                </Text>
                                             </TouchableOpacity>
-
                                         }
                                         keyExtractor={item => item.id}
+                                        refreshControl={
+                                            <RefreshControl
+                                                refreshing={refreshing}
+                                                onRefresh={onRefresh}
+                                            />
+                                        }
                                     />
                                 </View>
                             </View>
@@ -325,6 +430,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#5a5454',
+        paddingBottom: 15
     },
     modal: { backgroundColor: 'gray', padding: 10, marginHorizontal: 10 },
     scrollView: {

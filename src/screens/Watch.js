@@ -19,9 +19,6 @@ import getMovie from '../api/getMovie';
 
 const { width, height } = Dimensions.get("window");
 
-const wait = (timeout) => {
-    return new Promise(resolve => setTimeout(resolve, timeout));
-}
 const NUM_OF_LINES = 6;
 const Watch = ({ route, navigation }) => {
     const { id } = route.params
@@ -43,7 +40,8 @@ const Watch = ({ route, navigation }) => {
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        wait(2000).then(() => setRefreshing(false));
+        callApiGetMovie();
+        setRefreshing(false);
     }, []);
 
     const callApiGetMovie = async () => {
@@ -60,10 +58,8 @@ const Watch = ({ route, navigation }) => {
     }
 
     useEffect(() => {
-        console.log("Watch screen Mount");
         callApiGetMovie();
         return () => {
-            console.log("Watch screen Unmount");
         }
     }, []);
 
@@ -401,7 +397,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#5a5454',
-        paddingBottom: 48
+        paddingBottom: 55
     },
     scrollView: {
         alignItems: 'center',
@@ -436,7 +432,7 @@ const styles = StyleSheet.create({
     detail: { color: "#fff", fontSize: 14, fontFamily: 'Montserrat' },
     reactionWrap: { flexDirection: "row", marginRight: 20 },
     reaction: { marginRight: 5, lineHeight: 20 },
-    genresWrap: { flexDirection: "row", flexWrap: "wrap", marginTop: 10, paddingHorizontal: 5, },
+    genresWrap: { flexDirection: "row", flexWrap: "wrap", marginTop: 20, paddingHorizontal: 5, },
     genreTouch: {
         backgroundColor: "black",
         margin: 2,
@@ -444,7 +440,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         borderRadius: 10,
     },
-    blockWrap: { paddingHorizontal: 10, marginTop: 18, },
+    blockWrap: { paddingHorizontal: 10, marginTop: 20, },
     blockHeaderWrap: { borderColor: "gray", borderBottomWidth: 2, flexDirection: 'row', },
     blockHeader: {
         color: "#fff",

@@ -18,10 +18,6 @@ import { refreshToken } from '../redux/reducers/auth';
 
 const { width, height } = Dimensions.get("window");
 
-const wait = (timeout) => {
-    return new Promise(resolve => setTimeout(resolve, timeout));
-}
-
 const Home = ({ navigation }) => {
     const dispatch = useDispatch();
 
@@ -29,7 +25,8 @@ const Home = ({ navigation }) => {
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        wait(2000).then(() => setRefreshing(false));
+        console.log("re call api");
+        setRefreshing(false);
     }, []);
 
     const checkLoggedIn = async () => {

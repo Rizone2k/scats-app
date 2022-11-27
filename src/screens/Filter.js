@@ -48,7 +48,7 @@ const Filter = () => {
                 let c, y, g;
                 if (countryCheck) c = { country: countryCheck };
                 if (yearCheck) y = { year: yearCheck };
-                if (genresCheck.length > 0) g = { genres: genresCheck };
+                if (genresCheck.length > 0) g = { genre: genresCheck };
                 const filter = { ...c, ...y, ...{ limit: 21, page }, ...g };
                 const paramsString = queryString.stringify(filter, { arrayFormat: 'comma' });
                 const rs = await filterMovie(paramsString);

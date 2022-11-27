@@ -1,9 +1,8 @@
 import instance from "../configs/axios.config";
 
-const filterMovie = async (filter) => {
+const sendRoomPass = async (data) => {
     try {
-        console.log(filter);
-        const res = await instance.get(`/movie/filter?${filter}`);
+        const res = await instance.post(`/room/check`, data);
         if (res.status == 200) {
             const result = res.data;
             return result;
@@ -13,4 +12,4 @@ const filterMovie = async (filter) => {
     }
 }
 
-export default filterMovie;
+export default sendRoomPass;

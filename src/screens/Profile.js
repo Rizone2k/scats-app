@@ -70,7 +70,7 @@ const Profile = ({ navigation }) => {
             base64: true
         });
 
-        if (!result.assets.canceled) {
+        if (!result.canceled) {
             setAvatarSelect({
                 uri: result.assets[0].uri,
                 base64: result.assets[0].base64,
