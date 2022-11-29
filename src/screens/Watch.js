@@ -10,18 +10,28 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Button, TextInput } from 'react-native-paper';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import { WebView } from 'react-native-webview';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Header from '../components/Header';
 import getMovie from '../api/getMovie';
+import getComment from '../api/getComment';
+import {
+    isLoggedInSelector,
+    curentUserSelector
+} from '../redux/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import Comment from '../components/Comment';
+
 
 const { width, height } = Dimensions.get("window");
 
 const NUM_OF_LINES = 6;
 const Watch = ({ route, navigation }) => {
     const { id } = route.params
+    const isLoggedIn = useSelector(isLoggedInSelector);
+    const curentUser = useSelector(curentUserSelector);
     const video = useRef(null);
     const [source, setSource] = useState(false);
     const [movie, setMovie] = useState(null);
@@ -33,6 +43,9 @@ const Watch = ({ route, navigation }) => {
     const [links, setLinks] = useState([]);
     const [iframe, setIframe] = useState(false);
     const [isFullScreen, setIsFullScreen] = useState(false);
+
+    const [commentText, setCommentText] = useState('');
+    const [comments, setComments] = useState([]);
 
     const onTextLayout = useCallback(e => {
         setShowMore(e.nativeEvent.lines.length > numOfLine);
@@ -55,6 +68,30 @@ const Watch = ({ route, navigation }) => {
         } catch (error) {
             Alert.alert(null, "Error !!!");
         }
+    }
+
+    const callApiGetComment = async () => {
+        try {
+            const rs = await getComment(id);
+            if (rs.status == "success") {
+                if (rs.data != null) {
+                    const cmts = rs.data.comments;
+                    cmts.map(cmt => {
+                        cmt = { ...cmt, open_reply: false }
+                    });
+
+                    setComments(cmts);
+                }
+            } else {
+                Alert.alert(null, rs.message);
+            }
+        } catch (error) {
+            Alert.alert(null, "Error !!!");
+        }
+    }
+
+    const handleSendComment = () => {
+
     }
 
     useEffect(() => {
@@ -381,7 +418,224 @@ const Watch = ({ route, navigation }) => {
                                     <Text></Text>
                                 </View>
                                 <View style={{ marginTop: 5, padding: 5 }}>
+                                    {
+                                        isLoggedIn ?
+                                            (
+                                                // <View>
+                                                //     <View style={{ marginBottom: 10 }}>
+                                                //         <TextInput
+                                                //             style={{ width: "100%", marginBottom: 10, fontFamily: 'Montserrat' }}
+                                                //             mode="outlined"
+                                                //             right={
+                                                //                 <TextInput.Icon
+                                                //                     name="send"
+                                                //                     onPress={handleSendComment}
+                                                //                 />
+                                                //             }
+                                                //             onChangeText={(text) => {
+                                                //                 setCommentText(text.trim());
+                                                //             }}
+                                                //             placeholder="Nhập bình luận"
+                                                //             value={commentText}
+                                                //         />
+                                                //     </View>
+                                                //     <View>
+                                                //         <View
+                                                //             style={{
+                                                //                 flexDirection: "row",
+                                                //                 flex: 1
+                                                //             }}
+                                                //         >
+                                                //             <View style={{ marginRight: 10 }}>
+                                                //                 <Image
+                                                //                     style={{
+                                                //                         width: 50,
+                                                //                         height: 50,
+                                                //                         resizeMode: "contain",
+                                                //                         borderRadius: 100,
+                                                //                     }}
+                                                //                     source={{
+                                                //                         uri: 'https://drive.google.com/uc?id=1OtZ0WShJpu_DGgn9r346PsG5jksI4vng'
+                                                //                     }}
+                                                //                 />
+                                                //             </View>
+                                                //             <View
+                                                //                 style={{
+                                                //                     flex: 1,
+                                                //                     paddingHorizontal: 5
+                                                //                 }}
+                                                //             >
+                                                //                 <View style={{ flexDirection: "row", flexWrap: "wrap", }}>
+                                                //                     <Text
+                                                //                         style={{
+                                                //                             color: "#fff",
+                                                //                             fontFamily: "MontserratBold",
+                                                //                         }}
+                                                //                     >
+                                                //                         khavl741953
+                                                //                     </Text>
 
+                                                //                     <Text
+                                                //                         style={{
+                                                //                             color: "#fff",
+                                                //                             fontFamily: "Montserrat",
+                                                //                             marginLeft: "auto",
+                                                //                             fontSize: 12
+                                                //                         }}
+                                                //                     >
+                                                //                         5 giờ trước
+                                                //                     </Text>
+                                                //                 </View>
+                                                //                 <Text
+                                                //                     style={{
+                                                //                         color: "#fff",
+                                                //                         fontFamily: "Montserrat"
+                                                //                     }}
+                                                //                 >
+                                                //                     asdasdasdasdasdasdasdasdsasdasdasdasdsajdsajdbkasbdkasbdkasdkasjdjkasdsad
+                                                //                     asdasdasdasdasdasdasdasdsasdasdasdasdsajdsajdbkasbdkasbdkasdkasjdjkasdsad
+                                                //                     asdasdasdasdasdasdasdasdsasdasdasdasdsajdsajdbkasbdkasbdkasdkasjdjkasdsad
+                                                //                 </Text>
+                                                //                 <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+
+                                                //                     <TouchableOpacity
+                                                //                         style={{
+                                                //                             flexDirection: "row",
+                                                //                             alignItems: "center"
+                                                //                         }}
+                                                //                     >
+                                                //                         <Icon name="caret-down" color="#0ff" />
+                                                //                         <Text
+                                                //                             style={{ color: "#0ff", fontFamily: "MontserratBold", marginLeft: 5 }}
+                                                //                         >
+                                                //                             5 trả lời
+                                                //                         </Text>
+                                                //                     </TouchableOpacity>
+                                                //                     <TouchableOpacity
+                                                //                         style={{
+                                                //                             flexDirection: "row",
+                                                //                             alignItems: "center",
+                                                //                             marginLeft: "auto"
+                                                //                         }}
+                                                //                     >
+                                                //                         <Text
+                                                //                             style={{ color: "#0ff", fontFamily: "Montserrat" }}
+                                                //                         >
+                                                //                             Trả lời
+                                                //                         </Text>
+                                                //                     </TouchableOpacity>
+                                                //                 </View>
+                                                //                 <View style={{ marginTop: 5 }}>
+                                                //                     <View
+                                                //                         style={{
+                                                //                             flexDirection: "row",
+                                                //                             flex: 1
+                                                //                         }}
+                                                //                     >
+                                                //                         <View style={{ marginRight: 10 }}>
+                                                //                             <Image
+                                                //                                 style={{
+                                                //                                     width: 50,
+                                                //                                     height: 50,
+                                                //                                     resizeMode: "contain",
+                                                //                                     borderRadius: 100,
+                                                //                                 }}
+                                                //                                 source={{
+                                                //                                     uri: 'https://drive.google.com/uc?id=1OtZ0WShJpu_DGgn9r346PsG5jksI4vng'
+                                                //                                 }}
+                                                //                             />
+                                                //                         </View>
+                                                //                         <View
+                                                //                             style={{
+                                                //                                 flex: 1,
+                                                //                                 paddingHorizontal: 5
+                                                //                             }}
+                                                //                         >
+                                                //                             <View style={{ flexDirection: "row", flexWrap: "wrap", }}>
+                                                //                                 <Text
+                                                //                                     style={{
+                                                //                                         color: "#fff",
+                                                //                                         fontFamily: "MontserratBold",
+                                                //                                     }}
+                                                //                                 >
+                                                //                                     khavl741953
+                                                //                                 </Text>
+
+                                                //                                 <Text
+                                                //                                     style={{
+                                                //                                         color: "#fff",
+                                                //                                         fontFamily: "Montserrat",
+                                                //                                         marginLeft: "auto",
+                                                //                                         fontSize: 12
+                                                //                                     }}
+                                                //                                 >
+                                                //                                     5 giờ trước
+                                                //                                 </Text>
+                                                //                             </View>
+                                                //                             <Text
+                                                //                                 style={{
+                                                //                                     color: "#fff",
+                                                //                                     fontFamily: "Montserrat"
+                                                //                                 }}
+                                                //                             >
+                                                //                                 asdasdasdasdasdasdasdasdsasdasdasdasdsajdsajdbkasbdkasbdkasdkasjdjkasdsad
+                                                //                                 asdasdasdasdasdasdasdasdsasdasdasdasdsajdsajdbkasbdkasbdkasdkasjdjkasdsad
+                                                //                                 asdasdasdasdasdasdasdasdsasdasdasdasdsajdsajdbkasbdkasbdkasdkasjdjkasdsad
+                                                //                             </Text>
+                                                //                             <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+                                                //                                 <TouchableOpacity
+                                                //                                     style={{
+                                                //                                         flexDirection: "row",
+                                                //                                         alignItems: "center",
+                                                //                                         marginLeft: "auto"
+                                                //                                     }}
+                                                //                                 >
+                                                //                                     <Text
+                                                //                                         style={{ color: "#0ff", fontFamily: "Montserrat" }}
+                                                //                                     >
+                                                //                                         Trả lời
+                                                //                                     </Text>
+                                                //                                 </TouchableOpacity>
+                                                //                             </View>
+                                                //                             <View style={{ marginTop: 5 }}>
+                                                //                                 <TextInput
+                                                //                                     style={{ width: "100%", marginBottom: 10, fontFamily: 'Montserrat' }}
+                                                //                                     mode="outlined"
+                                                //                                     right={
+                                                //                                         <TextInput.Icon
+                                                //                                             name="send"
+                                                //                                             onPress={handleSendComment}
+                                                //                                         />
+                                                //                                     }
+                                                //                                     onChangeText={(text) => {
+                                                //                                         // setCommentText(text.trim());
+                                                //                                     }}
+                                                //                                     placeholder="Nhập bình luận"
+                                                //                                 // value={commentText}
+                                                //                                 />
+                                                //                             </View>
+                                                //                         </View>
+                                                //                     </View>
+                                                //                 </View>
+                                                //             </View>
+                                                //         </View>
+                                                //     </View>
+                                                // </View>
+                                                <Comment />
+                                            ) :
+                                            (
+                                                <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+                                                    <Text style={{ color: "#fff", fontFamily: "Montserrat", marginRight: 5 }}>
+                                                        Hãy đăng nhập để bình luận
+                                                    </Text>
+                                                    <TouchableOpacity>
+                                                        <Text style={{ color: "#0ff", fontFamily: "Montserrat" }}>
+                                                            Đăng nhập
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                </View>
+                                            )
+                                    }
                                 </View>
                             </View>
                         </View>
@@ -397,10 +651,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#5a5454',
-        paddingBottom: 55
     },
     scrollView: {
         alignItems: 'center',
+        paddingBottom: 100
+
     },
     imageBackground: {
         width: width,
@@ -432,7 +687,7 @@ const styles = StyleSheet.create({
     detail: { color: "#fff", fontSize: 14, fontFamily: 'Montserrat' },
     reactionWrap: { flexDirection: "row", marginRight: 20 },
     reaction: { marginRight: 5, lineHeight: 20 },
-    genresWrap: { flexDirection: "row", flexWrap: "wrap", marginTop: 20, paddingHorizontal: 5, },
+    genresWrap: { flexDirection: "row", flexWrap: "wrap", marginTop: 30, paddingHorizontal: 5, },
     genreTouch: {
         backgroundColor: "black",
         margin: 2,
@@ -440,7 +695,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         borderRadius: 10,
     },
-    blockWrap: { paddingHorizontal: 10, marginTop: 20, },
+    blockWrap: { paddingHorizontal: 10, marginTop: 30, },
     blockHeaderWrap: { borderColor: "gray", borderBottomWidth: 2, flexDirection: 'row', },
     blockHeader: {
         color: "#fff",
