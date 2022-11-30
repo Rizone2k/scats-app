@@ -8,7 +8,8 @@ import {
     RefreshControl,
     Image,
     TouchableOpacity,
-    Alert
+    Alert,
+    ToastAndroid
 } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { Video, AVPlaybackStatus } from 'expo-av';
@@ -16,22 +17,23 @@ import { WebView } from 'react-native-webview';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Header from '../components/Header';
 import getMovie from '../api/getMovie';
-import getComment from '../api/getComment';
+import { unwrapResult } from '@reduxjs/toolkit';
 import {
     isLoggedInSelector,
     curentUserSelector
 } from '../redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import Comment from '../components/Comment';
+import { getComments } from '../redux/reducers/comment';
 
 
 const { width, height } = Dimensions.get("window");
 
 const NUM_OF_LINES = 6;
 const Watch = ({ route, navigation }) => {
-    const { id } = route.params
+    const { id } = route.params;
+    const dispatch = useDispatch();
     const isLoggedIn = useSelector(isLoggedInSelector);
-    const curentUser = useSelector(curentUserSelector);
     const video = useRef(null);
     const [source, setSource] = useState(false);
     const [movie, setMovie] = useState(null);
@@ -44,9 +46,6 @@ const Watch = ({ route, navigation }) => {
     const [iframe, setIframe] = useState(false);
     const [isFullScreen, setIsFullScreen] = useState(false);
 
-    const [commentText, setCommentText] = useState('');
-    const [comments, setComments] = useState([]);
-
     const onTextLayout = useCallback(e => {
         setShowMore(e.nativeEvent.lines.length > numOfLine);
     }, []);
@@ -54,6 +53,7 @@ const Watch = ({ route, navigation }) => {
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         callApiGetMovie();
+        callApiGetComment();
         setRefreshing(false);
     }, []);
 
@@ -70,32 +70,17 @@ const Watch = ({ route, navigation }) => {
         }
     }
 
-    const callApiGetComment = async () => {
-        try {
-            const rs = await getComment(id);
-            if (rs.status == "success") {
-                if (rs.data != null) {
-                    const cmts = rs.data.comments;
-                    cmts.map(cmt => {
-                        cmt = { ...cmt, open_reply: false }
-                    });
-
-                    setComments(cmts);
-                }
-            } else {
-                Alert.alert(null, rs.message);
-            }
-        } catch (error) {
-            Alert.alert(null, "Error !!!");
-        }
-    }
-
-    const handleSendComment = () => {
-
+    const callApiGetComment = () => {
+        dispatch(getComments({ id, page: 1 }))
+            .then(unwrapResult)
+            .catch((err) => {
+                ToastAndroid.show("Lỗi!", ToastAndroid.SHORT);
+            });
     }
 
     useEffect(() => {
         callApiGetMovie();
+        callApiGetComment();
         return () => {
         }
     }, []);
@@ -421,207 +406,7 @@ const Watch = ({ route, navigation }) => {
                                     {
                                         isLoggedIn ?
                                             (
-                                                // <View>
-                                                //     <View style={{ marginBottom: 10 }}>
-                                                //         <TextInput
-                                                //             style={{ width: "100%", marginBottom: 10, fontFamily: 'Montserrat' }}
-                                                //             mode="outlined"
-                                                //             right={
-                                                //                 <TextInput.Icon
-                                                //                     name="send"
-                                                //                     onPress={handleSendComment}
-                                                //                 />
-                                                //             }
-                                                //             onChangeText={(text) => {
-                                                //                 setCommentText(text.trim());
-                                                //             }}
-                                                //             placeholder="Nhập bình luận"
-                                                //             value={commentText}
-                                                //         />
-                                                //     </View>
-                                                //     <View>
-                                                //         <View
-                                                //             style={{
-                                                //                 flexDirection: "row",
-                                                //                 flex: 1
-                                                //             }}
-                                                //         >
-                                                //             <View style={{ marginRight: 10 }}>
-                                                //                 <Image
-                                                //                     style={{
-                                                //                         width: 50,
-                                                //                         height: 50,
-                                                //                         resizeMode: "contain",
-                                                //                         borderRadius: 100,
-                                                //                     }}
-                                                //                     source={{
-                                                //                         uri: 'https://drive.google.com/uc?id=1OtZ0WShJpu_DGgn9r346PsG5jksI4vng'
-                                                //                     }}
-                                                //                 />
-                                                //             </View>
-                                                //             <View
-                                                //                 style={{
-                                                //                     flex: 1,
-                                                //                     paddingHorizontal: 5
-                                                //                 }}
-                                                //             >
-                                                //                 <View style={{ flexDirection: "row", flexWrap: "wrap", }}>
-                                                //                     <Text
-                                                //                         style={{
-                                                //                             color: "#fff",
-                                                //                             fontFamily: "MontserratBold",
-                                                //                         }}
-                                                //                     >
-                                                //                         khavl741953
-                                                //                     </Text>
-
-                                                //                     <Text
-                                                //                         style={{
-                                                //                             color: "#fff",
-                                                //                             fontFamily: "Montserrat",
-                                                //                             marginLeft: "auto",
-                                                //                             fontSize: 12
-                                                //                         }}
-                                                //                     >
-                                                //                         5 giờ trước
-                                                //                     </Text>
-                                                //                 </View>
-                                                //                 <Text
-                                                //                     style={{
-                                                //                         color: "#fff",
-                                                //                         fontFamily: "Montserrat"
-                                                //                     }}
-                                                //                 >
-                                                //                     asdasdasdasdasdasdasdasdsasdasdasdasdsajdsajdbkasbdkasbdkasdkasjdjkasdsad
-                                                //                     asdasdasdasdasdasdasdasdsasdasdasdasdsajdsajdbkasbdkasbdkasdkasjdjkasdsad
-                                                //                     asdasdasdasdasdasdasdasdsasdasdasdasdsajdsajdbkasbdkasbdkasdkasjdjkasdsad
-                                                //                 </Text>
-                                                //                 <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-
-                                                //                     <TouchableOpacity
-                                                //                         style={{
-                                                //                             flexDirection: "row",
-                                                //                             alignItems: "center"
-                                                //                         }}
-                                                //                     >
-                                                //                         <Icon name="caret-down" color="#0ff" />
-                                                //                         <Text
-                                                //                             style={{ color: "#0ff", fontFamily: "MontserratBold", marginLeft: 5 }}
-                                                //                         >
-                                                //                             5 trả lời
-                                                //                         </Text>
-                                                //                     </TouchableOpacity>
-                                                //                     <TouchableOpacity
-                                                //                         style={{
-                                                //                             flexDirection: "row",
-                                                //                             alignItems: "center",
-                                                //                             marginLeft: "auto"
-                                                //                         }}
-                                                //                     >
-                                                //                         <Text
-                                                //                             style={{ color: "#0ff", fontFamily: "Montserrat" }}
-                                                //                         >
-                                                //                             Trả lời
-                                                //                         </Text>
-                                                //                     </TouchableOpacity>
-                                                //                 </View>
-                                                //                 <View style={{ marginTop: 5 }}>
-                                                //                     <View
-                                                //                         style={{
-                                                //                             flexDirection: "row",
-                                                //                             flex: 1
-                                                //                         }}
-                                                //                     >
-                                                //                         <View style={{ marginRight: 10 }}>
-                                                //                             <Image
-                                                //                                 style={{
-                                                //                                     width: 50,
-                                                //                                     height: 50,
-                                                //                                     resizeMode: "contain",
-                                                //                                     borderRadius: 100,
-                                                //                                 }}
-                                                //                                 source={{
-                                                //                                     uri: 'https://drive.google.com/uc?id=1OtZ0WShJpu_DGgn9r346PsG5jksI4vng'
-                                                //                                 }}
-                                                //                             />
-                                                //                         </View>
-                                                //                         <View
-                                                //                             style={{
-                                                //                                 flex: 1,
-                                                //                                 paddingHorizontal: 5
-                                                //                             }}
-                                                //                         >
-                                                //                             <View style={{ flexDirection: "row", flexWrap: "wrap", }}>
-                                                //                                 <Text
-                                                //                                     style={{
-                                                //                                         color: "#fff",
-                                                //                                         fontFamily: "MontserratBold",
-                                                //                                     }}
-                                                //                                 >
-                                                //                                     khavl741953
-                                                //                                 </Text>
-
-                                                //                                 <Text
-                                                //                                     style={{
-                                                //                                         color: "#fff",
-                                                //                                         fontFamily: "Montserrat",
-                                                //                                         marginLeft: "auto",
-                                                //                                         fontSize: 12
-                                                //                                     }}
-                                                //                                 >
-                                                //                                     5 giờ trước
-                                                //                                 </Text>
-                                                //                             </View>
-                                                //                             <Text
-                                                //                                 style={{
-                                                //                                     color: "#fff",
-                                                //                                     fontFamily: "Montserrat"
-                                                //                                 }}
-                                                //                             >
-                                                //                                 asdasdasdasdasdasdasdasdsasdasdasdasdsajdsajdbkasbdkasbdkasdkasjdjkasdsad
-                                                //                                 asdasdasdasdasdasdasdasdsasdasdasdasdsajdsajdbkasbdkasbdkasdkasjdjkasdsad
-                                                //                                 asdasdasdasdasdasdasdasdsasdasdasdasdsajdsajdbkasbdkasbdkasdkasjdjkasdsad
-                                                //                             </Text>
-                                                //                             <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-                                                //                                 <TouchableOpacity
-                                                //                                     style={{
-                                                //                                         flexDirection: "row",
-                                                //                                         alignItems: "center",
-                                                //                                         marginLeft: "auto"
-                                                //                                     }}
-                                                //                                 >
-                                                //                                     <Text
-                                                //                                         style={{ color: "#0ff", fontFamily: "Montserrat" }}
-                                                //                                     >
-                                                //                                         Trả lời
-                                                //                                     </Text>
-                                                //                                 </TouchableOpacity>
-                                                //                             </View>
-                                                //                             <View style={{ marginTop: 5 }}>
-                                                //                                 <TextInput
-                                                //                                     style={{ width: "100%", marginBottom: 10, fontFamily: 'Montserrat' }}
-                                                //                                     mode="outlined"
-                                                //                                     right={
-                                                //                                         <TextInput.Icon
-                                                //                                             name="send"
-                                                //                                             onPress={handleSendComment}
-                                                //                                         />
-                                                //                                     }
-                                                //                                     onChangeText={(text) => {
-                                                //                                         // setCommentText(text.trim());
-                                                //                                     }}
-                                                //                                     placeholder="Nhập bình luận"
-                                                //                                 // value={commentText}
-                                                //                                 />
-                                                //                             </View>
-                                                //                         </View>
-                                                //                     </View>
-                                                //                 </View>
-                                                //             </View>
-                                                //         </View>
-                                                //     </View>
-                                                // </View>
-                                                <Comment />
+                                                <Comment idMovie={id} />
                                             ) :
                                             (
                                                 <View style={{ flexDirection: "row", flexWrap: "wrap" }}>

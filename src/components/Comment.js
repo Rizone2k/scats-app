@@ -5,143 +5,28 @@ import {
     View,
     TouchableOpacity,
     ToastAndroid,
-    Image
+    Image,
+    Alert
 } from 'react-native';
 import { TextInput } from 'react-native-paper';
+import {
+    curentUserSelector
+} from '../redux/selectors';
+import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { calculateTime, calculateTimeV2 } from '../utils';
+import { commentsSelector } from '../redux/selectors';
+import commentsSlice from '../redux/reducers/comment';
+import { sendComment, sendReply } from '../redux/reducers/comment';
 
 const NUM_OF_LINES = 3;
 
-const Comment = () => {
+const Comment = ({ idMovie }) => {
 
-    const [comments, setComments] = useState([
-        {
-            "id": 1,
-            "content": "hay vãi",
-            "user_id": 3,
-            "movie_id": 1,
-            "created_at": "2022-11-28T15:45:15.000Z",
-            "open_reply": false,
-            "User": {
-                "id": 3,
-                "username": "khavl7419531",
-                "avatar": "https://drive.google.com/uc?id=1OtZ0WShJpu_DGgn9r346PsG5jksI4vng"
-            },
-            "Replies": [
-                {
-                    "id": 1,
-                    "content": "9 xác",
-                    "comment_id": 1,
-                    "user_id": 2,
-                    "created_at": "2022-11-29T06:01:14.000Z",
-                    "User": {
-                        "id": 2,
-                        "username": "ringfake123",
-                        "avatar": "https://drive.google.com/uc?id=1medVHZnNZJj8A_XHEqsPx8cl6dT1MRnu"
-                    }
-                },
-                {
-                    "id": 2,
-                    "content": "9 xác",
-                    "comment_id": 1,
-                    "user_id": 2,
-                    "created_at": "2022-11-29T06:01:14.000Z",
-                    "User": {
-                        "id": 2,
-                        "username": "ringfake123",
-                        "avatar": "https://drive.google.com/uc?id=1medVHZnNZJj8A_XHEqsPx8cl6dT1MRnu"
-                    }
-                },
-                {
-                    "id": 3,
-                    "content": "9 xác",
-                    "comment_id": 1,
-                    "user_id": 2,
-                    "created_at": "2022-11-29T06:01:14.000Z",
-                    "User": {
-                        "id": 2,
-                        "username": "ringfake123",
-                        "avatar": "https://drive.google.com/uc?id=1medVHZnNZJj8A_XHEqsPx8cl6dT1MRnu"
-                    }
-                },
-                {
-                    "id": 4,
-                    "content": "9 xác",
-                    "comment_id": 1,
-                    "user_id": 2,
-                    "created_at": "2022-11-29T06:01:14.000Z",
-                    "User": {
-                        "id": 2,
-                        "username": "ringfake123",
-                        "avatar": "https://drive.google.com/uc?id=1medVHZnNZJj8A_XHEqsPx8cl6dT1MRnu"
-                    }
-                }
-            ]
-        },
-        {
-            "id": 2,
-            "content": "hay vcc",
-            "user_id": 3,
-            "movie_id": 1,
-            "created_at": "2022-11-28T15:45:15.000Z",
-            "open_reply": false,
-            "User": {
-                "id": 3,
-                "username": "khavl7419531",
-                "avatar": "https://drive.google.com/uc?id=1OtZ0WShJpu_DGgn9r346PsG5jksI4vng"
-            },
-            "Replies": [
-                {
-                    "id": 5,
-                    "content": "9 xác",
-                    "comment_id": 1,
-                    "user_id": 2,
-                    "created_at": "2022-11-29T06:01:14.000Z",
-                    "User": {
-                        "id": 2,
-                        "username": "ringfake123",
-                        "avatar": "https://drive.google.com/uc?id=1medVHZnNZJj8A_XHEqsPx8cl6dT1MRnu"
-                    }
-                },
-                {
-                    "id": 6,
-                    "content": "9 xác",
-                    "comment_id": 1,
-                    "user_id": 2,
-                    "created_at": "2022-11-29T06:01:14.000Z",
-                    "User": {
-                        "id": 2,
-                        "username": "ringfake123",
-                        "avatar": "https://drive.google.com/uc?id=1medVHZnNZJj8A_XHEqsPx8cl6dT1MRnu"
-                    }
-                },
-                {
-                    "id": 7,
-                    "content": "9 xác",
-                    "comment_id": 1,
-                    "user_id": 2,
-                    "created_at": "2022-11-29T06:01:14.000Z",
-                    "User": {
-                        "id": 2,
-                        "username": "ringfake123",
-                        "avatar": "https://drive.google.com/uc?id=1medVHZnNZJj8A_XHEqsPx8cl6dT1MRnu"
-                    }
-                },
-                {
-                    "id": 8,
-                    "content": "9 xác",
-                    "comment_id": 1,
-                    "user_id": 2,
-                    "created_at": "2022-11-29T06:01:14.000Z",
-                    "User": {
-                        "id": 2,
-                        "username": "ringfake123",
-                        "avatar": "https://drive.google.com/uc?id=1medVHZnNZJj8A_XHEqsPx8cl6dT1MRnu"
-                    }
-                }
-            ]
-        }
-    ]);
+    const dispatch = useDispatch();
+    const curentUser = useSelector(curentUserSelector);
+    const comments = useSelector(commentsSelector);
+    // const [comments, setComments] = useState(cmts.cmts);
     const [openReplyInput, setOpenReplyInput] = useState(null);
     const [commentText, setCommentText] = useState('');
     const [replyText, setReplyText] = useState('');
@@ -153,9 +38,15 @@ const Comment = () => {
         }
     }, []);
 
-    const handleSendComment = () => {
-        if (commentText.length > 0) {
-            console.log(commentText);
+    const handleSendComment = async () => {
+        if (commentText.trim().length > 0) {
+            dispatch(sendComment({
+                content: commentText.trim(),
+                idUser: curentUser.id,
+                idMovie
+            })).catch((err) => {
+                ToastAndroid.show("Lỗi!", ToastAndroid.SHORT);
+            });
             setCommentText('');
         } else {
             ToastAndroid.show("Vui lòng nhập bình luận", ToastAndroid.SHORT);
@@ -164,7 +55,13 @@ const Comment = () => {
 
     const handleSendReply = () => {
         if (replyText.length > 0) {
-            console.log(replyText);
+            dispatch(sendReply({
+                content: replyText.trim(),
+                idUser: curentUser.id,
+                idCmt: openReplyInput
+            })).catch((err) => {
+                ToastAndroid.show("Lỗi!", ToastAndroid.SHORT);
+            });
             setReplyText('');
         } else {
             ToastAndroid.show("Vui lòng nhập bình luận", ToastAndroid.SHORT);
@@ -183,20 +80,24 @@ const Comment = () => {
     }
 
     const handleOpenReply = ({ open, id }) => {
-        setComments(comments =>
-            comments.map(cmt => {
-                if (cmt.id == id) {
-                    return { ...cmt, open_reply: open }
-                }
-                return cmt;
-            })
-        )
+        const cmtsOpenReply = comments.cmts.map(cmt => {
+            if (cmt.id == id) {
+                return { ...cmt, open_reply: open }
+            }
+            return cmt;
+        });
+        dispatch(commentsSlice.actions.setOpenReply(cmtsOpenReply));
     }
 
     const handleOpenReplyInput = ({ id, user }) => {
         setOpenReplyInput(id);
         setReplyText(`@${user.username} `);
     }
+
+    useEffect(() => {
+        return () => {
+        }
+    }, []);
 
     return (
         <View>
@@ -211,16 +112,15 @@ const Comment = () => {
                         />
                     }
                     onChangeText={(text) => {
-                        setCommentText(text.trim());
+                        setCommentText(text);
                     }}
                     placeholder="Nhập bình luận"
-                    value={comments.length}
-                // value={commentText}
+                    value={commentText}
                 />
             </View>
             <View>
                 {
-                    comments.map(item =>
+                    comments.cmts.map(item =>
                         <View
                             style={{
                                 flexDirection: "row",
@@ -269,7 +169,7 @@ const Comment = () => {
                                             fontSize: 12
                                         }}
                                     >
-                                        {item.created_at}
+                                        {calculateTimeV2(item.created_at)}
                                     </Text>
                                 </View>
 
@@ -281,7 +181,7 @@ const Comment = () => {
                                         }}
                                         onTextLayout={e => onTextLayout(e, `${item.id}`)}
                                         numberOfLines={
-                                            showMore.some(e => e.id == 1) ?
+                                            showMore.some(e => e.id == `${item.id}`) ?
                                                 (showMore[showMore.findIndex(i => i.id == `${item.id}`)].show ? undefined : NUM_OF_LINES) :
                                                 99999
                                         }
@@ -322,24 +222,28 @@ const Comment = () => {
 
                                 <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
 
-                                    <TouchableOpacity
-                                        style={{
-                                            flexDirection: "row",
-                                            alignItems: "center"
-                                        }}
-                                        onPress={() => handleOpenReply({ open: !item.open_reply, id: item.id })}
-                                    >
-                                        {
-                                            item.open_reply ?
-                                                (<Icon name="caret-up" color="#0ff" />) :
-                                                (<Icon name="caret-down" color="#0ff" />)
-                                        }
-                                        <Text
-                                            style={{ color: "#0ff", fontFamily: "MontserratBold", marginLeft: 5 }}
+                                    {
+                                        item.Replies.length > 0 &&
+                                        <TouchableOpacity
+                                            style={{
+                                                flexDirection: "row",
+                                                alignItems: "center"
+                                            }}
+                                            onPress={() => handleOpenReply({ open: !item.open_reply, id: item.id })}
                                         >
-                                            {item.Replies.length} trả lời
-                                        </Text>
-                                    </TouchableOpacity>
+                                            {
+                                                item.open_reply ?
+                                                    (<Icon name="caret-up" color="#0ff" />) :
+                                                    (<Icon name="caret-down" color="#0ff" />)
+                                            }
+                                            <Text
+                                                style={{ color: "#0ff", fontFamily: "MontserratBold", marginLeft: 5 }}
+                                            >
+                                                {item.Replies.length} trả lời
+                                            </Text>
+                                        </TouchableOpacity>
+                                    }
+
                                     <TouchableOpacity
                                         style={{
                                             flexDirection: "row",
@@ -364,7 +268,8 @@ const Comment = () => {
                                                 <View
                                                     style={{
                                                         flexDirection: "row",
-                                                        flex: 1
+                                                        flex: 1,
+                                                        marginTop: 5
                                                     }}
                                                     key={rep.id}
                                                 >
@@ -408,7 +313,7 @@ const Comment = () => {
                                                                     fontSize: 12
                                                                 }}
                                                             >
-                                                                {rep.created_at}
+                                                                {calculateTimeV2(rep.created_at)}
                                                             </Text>
                                                         </View>
 
@@ -425,9 +330,7 @@ const Comment = () => {
                                                                         99999
                                                                 }
                                                             >
-                                                                asdasdasdasdasdasdasdasdsasdasdasdasdsajdsajdbkasbdkasbdkasdkasjdjkasdsad
-                                                                asdasdasdasdasdasdasdasdsasdasdasdasdsajdsajdbkasbdkasbdkasdkasjdjkasdsad
-                                                                asdasdasdasdasdasdasdasdsasdasdasdasdsajdsajdbkasbdkasbdkasdkasjdjkasdsad
+                                                                {rep.content}
                                                             </Text>
                                                             {
                                                                 showMore.some(e => e.id == `${rep.id}-reply`) ?
@@ -497,7 +400,7 @@ const Comment = () => {
                                                 />
                                             }
                                             onChangeText={(text) => {
-                                                setReplyText(text.trim());
+                                                setReplyText(text);
                                             }}
                                             placeholder="Nhập bình luận"
                                             value={replyText}
