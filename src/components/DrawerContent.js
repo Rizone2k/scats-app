@@ -10,7 +10,7 @@ import {
     yearsSelector,
     countriesSelector,
     isLoggedInSelector,
-    curentUserSelector
+    currentUserSelector
 } from '../redux/selectors';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { getGenres } from '../redux/reducers/genre';
@@ -25,7 +25,7 @@ const DrawerContent = (props) => {
     const years = useSelector(yearsSelector);
     const countries = useSelector(countriesSelector);
     const isLoggedIn = useSelector(isLoggedInSelector);
-    const curentUser = useSelector(curentUserSelector);
+    const currentUser = useSelector(currentUserSelector);
 
     const handleLogout = () => {
         dispatch(logout())
@@ -62,7 +62,7 @@ const DrawerContent = (props) => {
                                         }}
                                     >
                                         <Image
-                                            source={{ uri: curentUser.avatar }}
+                                            source={{ uri: currentUser.avatar }}
                                             style={{
                                                 width: 50,
                                                 height: 50,
@@ -78,10 +78,10 @@ const DrawerContent = (props) => {
                                             }}
                                         >
                                             <Text style={{ color: "#fff", fontFamily: 'Montserrat', fontSize: 18 }}>
-                                                {curentUser.username}
+                                                {currentUser.username}
                                             </Text>
                                             <Text style={{ color: "#fff", fontFamily: 'Montserrat', fontSize: 12 }}>
-                                                {curentUser.email}
+                                                {currentUser.email}
                                             </Text>
                                         </View>
                                     </View>

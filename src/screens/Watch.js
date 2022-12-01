@@ -20,7 +20,7 @@ import getMovie from '../api/getMovie';
 import { unwrapResult } from '@reduxjs/toolkit';
 import {
     isLoggedInSelector,
-    curentUserSelector
+    currentUserSelector
 } from '../redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import Comment from '../components/Comment';

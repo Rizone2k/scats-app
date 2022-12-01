@@ -5,7 +5,7 @@ const authSlice = createSlice({
     name: 'auth',
     initialState: {
         isLoggedIn: false,
-        curentUser: {}
+        currentUser: {}
     },
     reducers: {
         // IMMER
@@ -23,18 +23,18 @@ const authSlice = createSlice({
         builder
             .addCase(login.fulfilled, (state, action) => {
                 state.isLoggedIn = true;
-                state.curentUser = action.payload;
+                state.currentUser = action.payload;
             })
             .addCase(logout.fulfilled, (state) => {
                 state.isLoggedIn = false;
-                state.curentUser = {};
+                state.currentUser = {};
             })
             .addCase(refreshToken.fulfilled, (state, action) => {
                 state.isLoggedIn = true;
-                state.curentUser = action.payload;
+                state.currentUser = action.payload;
             })
             .addCase(updateInfor.fulfilled, (state, action) => {
-                state.curentUser = action.payload;
+                state.currentUser = action.payload;
             })
     },
 });

@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
 import {
     isLoggedInSelector,
-    curentUserSelector
+    currentUserSelector
 } from '../redux/selectors';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import createRoom from '../api/createRoom';
@@ -36,7 +36,7 @@ const { width, height } = Dimensions.get("window");
 const Explore = () => {
     const navigation = useNavigation();
     const isLoggedIn = useSelector(isLoggedInSelector);
-    const curentUser = useSelector(curentUserSelector);
+    const currentUser = useSelector(currentUserSelector);
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = useCallback(() => {
@@ -50,7 +50,7 @@ const Explore = () => {
 
     const [visibleCreateRoomModal, setVisibleCreateRoomModal] = useState(false);
     const [enterPassModal, setEnterPassModal] = useState(false);
-    const [roomName, setRoomName] = useState(`Phòng của ${curentUser.username || ''}`);
+    const [roomName, setRoomName] = useState(`Phòng của ${currentUser.username || ''}`);
     const [roomIsPrivate, setRoomIsPrivate] = useState(false);
     const [roomPass, setRoomPass] = useState('');
     const [passEnter, setPassEnter] = useState('');

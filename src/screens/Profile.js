@@ -25,7 +25,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { updateInfor } from '../redux/reducers/auth';
 import {
     isLoggedInSelector,
-    curentUserSelector
+    currentUserSelector
 } from '../redux/selectors';
 import Header from '../components/Header';
 
@@ -34,16 +34,16 @@ const { width, height } = Dimensions.get("window");
 const Profile = ({ navigation }) => {
     const dispatch = useDispatch();
     const isLoggedIn = useSelector(isLoggedInSelector);
-    const curentUser = useSelector(curentUserSelector);
-    const [username, setUsername] = useState(curentUser.username || '');
-    const [email, setEmail] = useState(curentUser.email || '');
+    const currentUser = useSelector(currentUserSelector);
+    const [username, setUsername] = useState(currentUser.username || '');
+    const [email, setEmail] = useState(currentUser.email || '');
     const [visibleUpdateInforModal, setVisibleUpdateInforModal] = useState(false);
     const [avatarSelect, setAvatarSelect] = useState(null);
 
     const handleUpdateInforClick = () => {
         if (username.length >= 6) {
             let data = {
-                id: curentUser.id,
+                id: currentUser.id,
                 username: username,
                 email: email
             }
@@ -131,7 +131,7 @@ const Profile = ({ navigation }) => {
                                                         resizeMode: "contain",
                                                         borderRadius: 100
                                                     }}
-                                                    source={{ uri: avatarSelect ? avatarSelect.uri : curentUser.avatar }}
+                                                    source={{ uri: avatarSelect ? avatarSelect.uri : currentUser.avatar }}
                                                 />
                                                 <TouchableOpacity
                                                     style={{
@@ -198,7 +198,7 @@ const Profile = ({ navigation }) => {
                                                     marginRight: 15,
                                                     borderRadius: 100
                                                 }}
-                                                source={{ uri: curentUser.avatar }}
+                                                source={{ uri: currentUser.avatar }}
                                             />
                                         </View>
                                         <View>
@@ -209,7 +209,7 @@ const Profile = ({ navigation }) => {
                                                     fontSize: 20
                                                 }}
                                             >
-                                                {curentUser.username}
+                                                {currentUser.username}
                                             </Text>
                                             <Text
                                                 style={{
@@ -218,7 +218,7 @@ const Profile = ({ navigation }) => {
                                                     fontSize: 12
                                                 }}
                                             >
-                                                Email: {curentUser.email}
+                                                Email: {currentUser.email}
                                             </Text>
                                         </View>
                                     </View>

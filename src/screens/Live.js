@@ -22,7 +22,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as SecureStore from 'expo-secure-store';
 import { useSelector } from 'react-redux';
-import { curentUserSelector } from '../redux/selectors';
+import { currentUserSelector } from '../redux/selectors';
 import { debounce } from "lodash";
 import { Video, AVPlaybackStatus } from 'expo-av';
 import { io } from "socket.io-client";
@@ -34,7 +34,7 @@ let uid, currentPosition;
 
 const Live = ({ route, navigation }) => {
     const { id } = route.params;
-    const curentUser = useSelector(curentUserSelector);
+    const currentUser = useSelector(currentUserSelector);
     const player = useRef();
     const [arrMovie, setArrMovie] = useState([]);
     const [currentVideo, setCurrentVideo] = useState(null);

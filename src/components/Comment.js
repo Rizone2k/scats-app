@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import {
-    curentUserSelector
+    currentUserSelector
 } from '../redux/selectors';
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -24,7 +24,7 @@ const NUM_OF_LINES = 3;
 const Comment = ({ idMovie }) => {
 
     const dispatch = useDispatch();
-    const curentUser = useSelector(curentUserSelector);
+    const currentUser = useSelector(currentUserSelector);
     const comments = useSelector(commentsSelector);
     // const [comments, setComments] = useState(cmts.cmts);
     const [openReplyInput, setOpenReplyInput] = useState(null);
@@ -42,7 +42,7 @@ const Comment = ({ idMovie }) => {
         if (commentText.trim().length > 0) {
             dispatch(sendComment({
                 content: commentText.trim(),
-                idUser: curentUser.id,
+                idUser: currentUser.id,
                 idMovie
             })).catch((err) => {
                 ToastAndroid.show("Lỗi!", ToastAndroid.SHORT);
@@ -57,7 +57,7 @@ const Comment = ({ idMovie }) => {
         if (replyText.length > 0) {
             dispatch(sendReply({
                 content: replyText.trim(),
-                idUser: curentUser.id,
+                idUser: currentUser.id,
                 idCmt: openReplyInput
             })).catch((err) => {
                 ToastAndroid.show("Lỗi!", ToastAndroid.SHORT);
