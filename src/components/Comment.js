@@ -189,34 +189,32 @@ const Comment = ({ idMovie }) => {
                                         {item.content}
                                     </Text>
                                     {
-                                        showMore.some(e => e.id == `${item.id}`) ?
-                                            (
-                                                <View style={{ flexDirection: "row", marginTop: 5 }} >
-                                                    {
-                                                        (showMore[showMore.findIndex(i => i.id == `${item.id}`)].show) ?
-                                                            (
-                                                                <TouchableOpacity
-                                                                    style={{ flexShrink: 1, }}
-                                                                    onPress={() => handleShowMore({ show: false, id: `${item.id}` })}
-                                                                >
-                                                                    <Text style={{ color: "#e6e6e6", fontFamily: "Montserrat", fontSize: 12, }}>
-                                                                        Rút gọn
-                                                                    </Text>
-                                                                </TouchableOpacity>
-                                                            ) :
-                                                            (
-                                                                <TouchableOpacity
-                                                                    style={{ flexShrink: 1, }}
-                                                                    onPress={() => handleShowMore({ show: true, id: `${item.id}` })}
-                                                                >
-                                                                    <Text style={{ color: "#e6e6e6", fontFamily: "Montserrat", fontSize: 12, }}>
-                                                                        Xem thêm
-                                                                    </Text>
-                                                                </TouchableOpacity>
-                                                            )
-                                                    }
-                                                </View>
-                                            ) : ('')
+                                        showMore.some(e => e.id == `${item.id}`) &&
+                                        <View style={{ flexDirection: "row", marginTop: 5 }} >
+                                            {
+                                                (showMore[showMore.findIndex(i => i.id == `${item.id}`)].show) ?
+                                                    (
+                                                        <TouchableOpacity
+                                                            style={{ flexShrink: 1, }}
+                                                            onPress={() => handleShowMore({ show: false, id: `${item.id}` })}
+                                                        >
+                                                            <Text style={{ color: "#e6e6e6", fontFamily: "Montserrat", fontSize: 12, }}>
+                                                                Rút gọn
+                                                            </Text>
+                                                        </TouchableOpacity>
+                                                    ) :
+                                                    (
+                                                        <TouchableOpacity
+                                                            style={{ flexShrink: 1, }}
+                                                            onPress={() => handleShowMore({ show: true, id: `${item.id}` })}
+                                                        >
+                                                            <Text style={{ color: "#e6e6e6", fontFamily: "Montserrat", fontSize: 12, }}>
+                                                                Xem thêm
+                                                            </Text>
+                                                        </TouchableOpacity>
+                                                    )
+                                            }
+                                        </View>
                                     }
                                 </View>
 
@@ -333,34 +331,32 @@ const Comment = ({ idMovie }) => {
                                                                 {rep.content}
                                                             </Text>
                                                             {
-                                                                showMore.some(e => e.id == `${rep.id}-reply`) ?
-                                                                    (
-                                                                        <View style={{ flexDirection: "row", marginTop: 5 }} >
-                                                                            {
-                                                                                showMore[showMore.findIndex(i => i.id == `${rep.id}-reply`)].show ?
-                                                                                    (
-                                                                                        <TouchableOpacity
-                                                                                            style={{ flexShrink: 1, }}
-                                                                                            onPress={() => handleShowMore({ show: false, id: `${rep.id}-reply` })}
-                                                                                        >
-                                                                                            <Text style={{ color: "#e6e6e6", fontFamily: "Montserrat", fontSize: 12, }}>
-                                                                                                Rút gọn
-                                                                                            </Text>
-                                                                                        </TouchableOpacity>
-                                                                                    ) :
-                                                                                    (
-                                                                                        <TouchableOpacity
-                                                                                            style={{ flexShrink: 1, }}
-                                                                                            onPress={() => handleShowMore({ show: true, id: `${rep.id}-reply` })}
-                                                                                        >
-                                                                                            <Text style={{ color: "#e6e6e6", fontFamily: "Montserrat", fontSize: 12, }}>
-                                                                                                Xem thêm
-                                                                                            </Text>
-                                                                                        </TouchableOpacity>
-                                                                                    )
-                                                                            }
-                                                                        </View>
-                                                                    ) : ('')
+                                                                showMore.some(e => e.id == `${rep.id}-reply`) &&
+                                                                <View style={{ flexDirection: "row", marginTop: 5 }} >
+                                                                    {
+                                                                        showMore[showMore.findIndex(i => i.id == `${rep.id}-reply`)].show ?
+                                                                            (
+                                                                                <TouchableOpacity
+                                                                                    style={{ flexShrink: 1, }}
+                                                                                    onPress={() => handleShowMore({ show: false, id: `${rep.id}-reply` })}
+                                                                                >
+                                                                                    <Text style={{ color: "#e6e6e6", fontFamily: "Montserrat", fontSize: 12, }}>
+                                                                                        Rút gọn
+                                                                                    </Text>
+                                                                                </TouchableOpacity>
+                                                                            ) :
+                                                                            (
+                                                                                <TouchableOpacity
+                                                                                    style={{ flexShrink: 1, }}
+                                                                                    onPress={() => handleShowMore({ show: true, id: `${rep.id}-reply` })}
+                                                                                >
+                                                                                    <Text style={{ color: "#e6e6e6", fontFamily: "Montserrat", fontSize: 12, }}>
+                                                                                        Xem thêm
+                                                                                    </Text>
+                                                                                </TouchableOpacity>
+                                                                            )
+                                                                    }
+                                                                </View>
                                                             }
                                                         </View>
 

@@ -11,7 +11,7 @@ import {
     Alert,
     ToastAndroid
 } from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
+import { Button, TextInput, Chip } from 'react-native-paper';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import { WebView } from 'react-native-webview';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -88,7 +88,8 @@ const Watch = ({ route, navigation }) => {
     return (
         <View style={styles.container}>
             <Header allowBack={true}></Header>
-            {movie !== null ? (
+            {
+                movie !== null &&
                 <View style={{}}>
                     <ScrollView
                         showsVerticalScrollIndicator={false}
@@ -171,12 +172,22 @@ const Watch = ({ route, navigation }) => {
                             <View style={styles.genresWrap}>
                                 {
                                     movie.Genres.map((e) =>
-                                        <TouchableOpacity
-                                            style={styles.genreTouch}
+                                        // <TouchableOpacity
+                                        //     style={styles.genreTouch}
+                                        //     key={e.id}
+                                        // >
+                                        //     <Text style={{ color: "#fff", fontFamily: 'Montserrat' }}>#{e.name}</Text>
+                                        // </TouchableOpacity>
+                                        <Chip
+                                            style={{ margin: 2, backgroundColor: "#222222" }}
+                                            icon={({ size, color }) =>
+                                                <Icon name="pricetags" color="#fff" size={size} />
+                                            }
+                                            onPress={() => console.log('Pressed')}
                                             key={e.id}
                                         >
-                                            <Text style={{ color: "#fff", fontFamily: 'Montserrat' }}>#{e.name}</Text>
-                                        </TouchableOpacity>
+                                            <Text style={{ color: "#fff", fontFamily: 'Montserrat' }}>{e.name}</Text>
+                                        </Chip>
                                     )
                                 }
                             </View>
@@ -196,149 +207,143 @@ const Watch = ({ route, navigation }) => {
                                         {movie.content.replace(/<\/?[^>]+(>|$)/g, "")}
                                     </Text>
                                     {
-                                        showMore ?
-                                            (
-                                                <View style={{ marginTop: 2 }}>
-                                                    {
-                                                        viewMore ?
-                                                            (
-                                                                <TouchableOpacity
-                                                                    onPress={() => {
-                                                                        setNumOfLine(999999);
-                                                                        setViewMore(false);
-                                                                    }}
-                                                                >
-                                                                    <Text
-                                                                        style={
-                                                                            styles.showMore
-                                                                        }
-                                                                    >Xem thêm</Text>
-                                                                </TouchableOpacity>
-                                                            ) :
-                                                            (
-                                                                <TouchableOpacity
-                                                                    onPress={() => {
-                                                                        setNumOfLine(NUM_OF_LINES);
-                                                                        setViewMore(true);
-                                                                    }}
-                                                                >
-                                                                    <Text
-                                                                        style={
-                                                                            styles.showMore
-                                                                        }
-                                                                    >Rút gọn</Text>
-                                                                </TouchableOpacity>
-                                                            )
-                                                    }
-                                                </View>
-                                            ) :
-                                            ('')
+                                        showMore &&
+                                        <View style={{ marginTop: 2 }}>
+                                            {
+                                                viewMore ?
+                                                    (
+                                                        <TouchableOpacity
+                                                            onPress={() => {
+                                                                setNumOfLine(999999);
+                                                                setViewMore(false);
+                                                            }}
+                                                        >
+                                                            <Text
+                                                                style={
+                                                                    styles.showMore
+                                                                }
+                                                            >Xem thêm</Text>
+                                                        </TouchableOpacity>
+                                                    ) :
+                                                    (
+                                                        <TouchableOpacity
+                                                            onPress={() => {
+                                                                setNumOfLine(NUM_OF_LINES);
+                                                                setViewMore(true);
+                                                            }}
+                                                        >
+                                                            <Text
+                                                                style={
+                                                                    styles.showMore
+                                                                }
+                                                            >Rút gọn</Text>
+                                                        </TouchableOpacity>
+                                                    )
+                                            }
+                                        </View>
                                     }
                                 </View>
                             </View>
 
                             {
-                                source ?
-                                    (
-                                        <View style={styles.blockWrap}>
-                                            <View>
-                                                {
-                                                    iframe ?
-                                                        (
-                                                            <View style={{ height: (width - 20) * (9 / 16), }}>
-                                                                <WebView
-                                                                    scalesPageToFit={false}
-                                                                    style={[styles.video]}
-                                                                    allowsFullscreenVideo={true}
-                                                                    originWhitelist={['*']}
-                                                                    javaScriptEnabled={true}
-                                                                    source={{
-                                                                        html: `<body style="margin: 0 !important;padding: 0 !important;"><iframe width="100%" height="100%" src="${iframe}" frameborder="0"></iframe></body>`
-                                                                    }}
-                                                                />
-                                                            </View>
-                                                        ) :
-                                                        (
-                                                            <Video
-                                                                ref={video}
-                                                                style={styles.video}
-                                                                source={{
-                                                                    uri: source,
-                                                                }}
-                                                                onError={(err) => {
-                                                                    Alert.alert(null, "Không thể tải được video !!!");
-                                                                }}
-                                                                useNativeControls
-                                                                onFullscreenUpdate={(e) => {
-                                                                    console.log(e.fullscreenUpdate == 1);
-                                                                    setIsFullScreen(e.fullscreenUpdate == 1 ? true : false);
-                                                                    // console.log(isFullScreen);
-                                                                }}
-                                                                resizeMode="contain"
-                                                            />
-                                                        )
+                                source &&
+                                <View style={styles.blockWrap}>
+                                    <View>
+                                        {
+                                            iframe ?
+                                                (
+                                                    <View style={{ height: (width - 20) * (9 / 16), }}>
+                                                        <WebView
+                                                            scalesPageToFit={false}
+                                                            style={[styles.video]}
+                                                            allowsFullscreenVideo={true}
+                                                            originWhitelist={['*']}
+                                                            javaScriptEnabled={true}
+                                                            source={{
+                                                                html: `<body style="margin: 0 !important;padding: 0 !important;"><iframe width="100%" height="100%" src="${iframe}" frameborder="0"></iframe></body>`
+                                                            }}
+                                                        />
+                                                    </View>
+                                                ) :
+                                                (
+                                                    <Video
+                                                        ref={video}
+                                                        style={styles.video}
+                                                        source={{
+                                                            uri: source,
+                                                        }}
+                                                        onError={(err) => {
+                                                            Alert.alert(null, "Không thể tải được video !!!");
+                                                        }}
+                                                        useNativeControls
+                                                        onFullscreenUpdate={(e) => {
+                                                            console.log(e.fullscreenUpdate == 1);
+                                                            setIsFullScreen(e.fullscreenUpdate == 1 ? true : false);
+                                                            // console.log(isFullScreen);
+                                                        }}
+                                                        resizeMode="contain"
+                                                    />
+                                                )
+                                        }
+                                    </View>
+                                    <View
+                                        style={{ justifyContent: "center" }}
+                                    >
+                                        <Text style={[styles.detail, { textAlign: "center" }]}>
+                                            Link dự phòng
+                                        </Text>
+                                        <View style={styles.linkWrap}>
+                                            <TouchableOpacity
+                                                style={
+                                                    [
+                                                        styles.linkTouch,
+                                                        iframe ? '' : styles.linkActive
+                                                    ]
                                                 }
-                                            </View>
-                                            <View
-                                                style={{ justifyContent: "center" }}
+                                                onPress={() => {
+                                                    if (iframe) {
+                                                        setIframe(false);
+                                                    } else {
+                                                        Alert.alert(null, "Bạn đã chọn !!!");
+                                                    }
+                                                }}
                                             >
-                                                <Text style={[styles.detail, { textAlign: "center" }]}>
-                                                    Link dự phòng
+                                                <Text
+                                                    style={[styles.detail, { textAlign: "center" }]}
+                                                >
+                                                    Main
                                                 </Text>
-                                                <View style={styles.linkWrap}>
+                                            </TouchableOpacity>
+                                            {
+
+                                                links.map((e) =>
                                                     <TouchableOpacity
                                                         style={
                                                             [
                                                                 styles.linkTouch,
-                                                                iframe ? '' : styles.linkActive
+                                                                iframe ? styles.linkActive : ''
                                                             ]
                                                         }
                                                         onPress={() => {
-                                                            if (iframe) {
-                                                                setIframe(false);
+                                                            if (iframe != e.link) {
+                                                                setIframe(e.link);
                                                             } else {
                                                                 Alert.alert(null, "Bạn đã chọn !!!");
                                                             }
                                                         }}
+                                                        key={e.id}
                                                     >
                                                         <Text
                                                             style={[styles.detail, { textAlign: "center" }]}
                                                         >
-                                                            Main
+                                                            {e.Server.name}
                                                         </Text>
                                                     </TouchableOpacity>
-                                                    {
-
-                                                        links.map((e) =>
-                                                            <TouchableOpacity
-                                                                style={
-                                                                    [
-                                                                        styles.linkTouch,
-                                                                        iframe ? styles.linkActive : ''
-                                                                    ]
-                                                                }
-                                                                onPress={() => {
-                                                                    if (iframe != e.link) {
-                                                                        setIframe(e.link);
-                                                                    } else {
-                                                                        Alert.alert(null, "Bạn đã chọn !!!");
-                                                                    }
-                                                                }}
-                                                                key={e.id}
-                                                            >
-                                                                <Text
-                                                                    style={[styles.detail, { textAlign: "center" }]}
-                                                                >
-                                                                    {e.Server.name}
-                                                                </Text>
-                                                            </TouchableOpacity>
-                                                        )
-                                                    }
-                                                </View>
-                                            </View>
+                                                )
+                                            }
                                         </View>
-                                    ) :
-                                    ('')
+                                    </View>
+                                </View>
                             }
 
                             <View style={[styles.blockWrap, { height: 250 }]}>
@@ -427,7 +432,7 @@ const Watch = ({ route, navigation }) => {
 
                     </ScrollView>
                 </View>
-            ) : ('')}
+            }
         </View>
     );
 }
@@ -439,8 +444,7 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         alignItems: 'center',
-        paddingBottom: 100
-
+        paddingBottom: 40
     },
     imageBackground: {
         width: width,

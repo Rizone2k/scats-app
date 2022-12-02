@@ -114,7 +114,6 @@ export const updateInfor = createAsyncThunk('auth/updateInfor', async ({ id, use
         const res = await instance.post(`/user/update`, formData);
         if (res.status == 200) {
             if (res.data.status == 'success') {
-                console.log(res.data.data)
                 return res.data.data;
             } else {
                 throw rejectWithValue(res.data.message);

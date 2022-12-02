@@ -216,22 +216,20 @@ const DrawerContent = (props) => {
                     <View style={styles.authSection}></View>
                 </View>
                 {
-                    isLoggedIn ?
-                        (
-                            <Drawer.Section style={styles.drawerSection} >
-                                <DrawerItem
-                                    icon={({ size, color }) => (
-                                        <Icon
-                                            name="log-out-outline" size={size} color="#fff"
-                                        />
-                                    )}
-                                    label={() => {
-                                        return <Text style={styles.drawerTitle}>Đăng xuất</Text>
-                                    }}
-                                    onPress={handleLogout}
+                    isLoggedIn &&
+                    <Drawer.Section style={styles.drawerSection} >
+                        <DrawerItem
+                            icon={({ size, color }) => (
+                                <Icon
+                                    name="log-out-outline" size={size} color="#fff"
                                 />
-                            </Drawer.Section>
-                        ) : ('')
+                            )}
+                            label={() => {
+                                return <Text style={styles.drawerTitle}>Đăng xuất</Text>
+                            }}
+                            onPress={handleLogout}
+                        />
+                    </Drawer.Section>
                 }
             </DrawerContentScrollView>
         </View>

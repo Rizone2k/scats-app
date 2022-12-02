@@ -213,18 +213,16 @@ const Explore = () => {
                                         </View>
 
                                         {
-                                            roomIsPrivate ?
-                                                (
-                                                    <TextInput
-                                                        style={{ width: "100%", marginVertical: 5, fontFamily: 'Montserrat' }}
-                                                        mode="flat"
-                                                        label={<Text style={{ fontFamily: 'Montserrat' }}>Mật khẩu</Text>}
-                                                        value={roomPass}
-                                                        onChangeText={(text) => {
-                                                            setRoomPass(text)
-                                                        }}
-                                                    />
-                                                ) : ('')
+                                            roomIsPrivate &&
+                                            <TextInput
+                                                style={{ width: "100%", marginVertical: 5, fontFamily: 'Montserrat' }}
+                                                mode="flat"
+                                                label={<Text style={{ fontFamily: 'Montserrat' }}>Mật khẩu</Text>}
+                                                value={roomPass}
+                                                onChangeText={(text) => {
+                                                    setRoomPass(text)
+                                                }}
+                                            />
                                         }
 
                                         <View style={{ alignItems: "center", marginTop: 10 }}>

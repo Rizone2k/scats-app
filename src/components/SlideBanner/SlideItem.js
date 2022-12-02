@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const { width, height } = Dimensions.get("window");
 
@@ -14,8 +15,30 @@ const SlideItem = ({ item }) => {
         >
             <Image style={styles.image} source={{ uri: item.background }} />
             <View style={styles.textView}>
-                <Text style={styles.itemTitle} numberOfLines={1}> {item.name}</Text>
-                <Text style={styles.itemView} numberOfLines={1}>{item.viewed}</Text>
+                <Text style={styles.itemTitle} numberOfLines={1}>{item.name}</Text>
+                <Text style={{ fontFamily: "Montserrat", color: "#fff" }} numberOfLines={1}>{item.aka}</Text>
+                <View
+                    style={{ flexDirection: "row", flexWrap: "wrap" }}
+                >
+                    <View style={{ flexDirection: "row", flexWrap: "wrap", marginRight: 10, alignItems: "center" }}>
+                        <Icon name="eye" color="#0ff" />
+                        <Text style={styles.itemView} numberOfLines={1}>
+                            {item.viewed}
+                        </Text>
+                    </View>
+                    <View style={{ flexDirection: "row", flexWrap: "wrap", marginRight: 10, alignItems: "center" }}>
+                        <Icon name="heart" color="red" />
+                        <Text style={styles.itemView} numberOfLines={1}>
+                            {item.liked}
+                        </Text>
+                    </View>
+                    <View style={{ flexDirection: "row", flexWrap: "wrap", marginRight: 10, alignItems: "center" }}>
+                        <Icon name="star" color="yellow" />
+                        <Text style={styles.itemView} numberOfLines={1}>
+                            {item.rating}
+                        </Text>
+                    </View>
+                </View>
             </View>
         </TouchableOpacity>
     )
@@ -55,7 +78,7 @@ const styles = StyleSheet.create({
     itemTitle: {
         fontFamily: 'MontserratBold',
         color: 'white',
-        fontSize: 20,
+        fontSize: 17,
         shadowColor: '#000',
         shadowOffset: { width: 0.8, height: 0.8 },
         shadowOpacity: 1,

@@ -13,15 +13,17 @@ const Card = ({ item }) => {
                 navigation.navigate("WatchScreen", { id: item.id })
             }}
         >
-            <Image style={
-                {
-                    width: width / 3,
-                    height: ((width / 3) * (16 / 9)) - 45,
-                    resizeMode: 'contain',
-                    borderRadius: 5
+            <Image
+                style={
+                    {
+                        width: width / 3,
+                        height: ((width / 3) * (16 / 9)) - 45,
+                        resizeMode: 'contain',
+                        borderRadius: 5
+                    }
                 }
-            }
-                source={{ uri: item.thumb }} />
+                source={{ uri: item.thumb }}
+            />
             <Text
                 style={
                     {

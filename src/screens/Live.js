@@ -127,6 +127,10 @@ const Live = ({ route, navigation }) => {
             setViewers(list);
         });
 
+        socket.on("update-playlist", (playlist) => {
+            setPlaylist(playlist);
+        });
+
         socket.on("change-video", (video) => {
             setCurrentVideo(video);
             player.current.playAsync()
@@ -149,8 +153,8 @@ const Live = ({ route, navigation }) => {
 
         socket.on("position", position => {
             // console.log(Math.abs(position - currentPosition));
-            if (Math.abs(position - currentPosition) > 1500) {
-                setPosition(parseInt(position) + 400);
+            if (Math.abs(position - currentPosition) > 2500) {
+                setPosition(parseInt(position) + 1000);
                 player.current.playAsync();
             }
         });
@@ -324,187 +328,181 @@ const Live = ({ route, navigation }) => {
                             style={{ flex: 1, backgroundColor: "#3d3d3d", marginTop: 5 }}
                         >
                             {
-                                tabSelect == 1 ?
-                                    (
-                                        <View
-                                            style={{ flex: 1 }}
+                                tabSelect == 1 &&
+                                <View
+                                    style={{ flex: 1 }}
+                                >
+                                    <View
+                                        style={{
+                                            flexDirection: "row",
+                                            flexWrap: "wrap",
+                                            justifyContent: "center",
+                                            marginTop: 5,
+                                        }}
+                                    >
+                                        <Button
+                                            mode="contained"
+                                            uppercase={false}
+                                            icon={({ size, color }) => (
+                                                <Icon name="search" size={size} color="#fff" />
+                                            )}
+                                            onPress={() => setVisibleSearchModal(true)}
                                         >
-                                            <View
-                                                style={{
-                                                    flexDirection: "row",
-                                                    flexWrap: "wrap",
-                                                    justifyContent: "center",
-                                                    marginTop: 5,
-                                                }}
-                                            >
-                                                <Button
-                                                    mode="contained"
-                                                    uppercase={false}
-                                                    icon={({ size, color }) => (
-                                                        <Icon name="search" size={size} color="#fff" />
-                                                    )}
-                                                    onPress={() => setVisibleSearchModal(true)}
+                                            Tìm kiếm
+                                        </Button>
+                                    </View>
+                                    <View style={{ flex: 1, padding: 5 }}>
+                                        <FlatList
+                                            nestedScrollEnabled
+                                            showsVerticalScrollIndicator={false}
+                                            data={playlist}
+                                            renderItem={({ item }) =>
+                                                <View
+                                                    style={[
+                                                        styles.playlistItem,
+                                                        (currentVideo && item.id == currentVideo.id) ?
+                                                            {
+                                                                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                                                            } : ''
+                                                    ]}
+                                                    key={item.id}
                                                 >
-                                                    Tìm kiếm
-                                                </Button>
-                                            </View>
-                                            <View style={{ flex: 1, padding: 5 }}>
-                                                <FlatList
-                                                    nestedScrollEnabled
-                                                    showsVerticalScrollIndicator={false}
-                                                    data={playlist}
-                                                    renderItem={({ item }) =>
-                                                        <View
-                                                            style={[
-                                                                styles.playlistItem,
-                                                                (currentVideo && item.id == currentVideo.id) ?
-                                                                    {
-                                                                        backgroundColor: "rgba(0, 0, 0, 0.5)",
-                                                                    } : ''
-                                                            ]}
-                                                            key={item.id}
+                                                    <TouchableOpacity
+                                                        style={{ flex: 9, marginRight: 5 }}
+                                                        onPress={() => {
+                                                            handleChangeVideo(item);
+                                                        }}
+                                                    >
+                                                        <Text
+                                                            style={styles.text}
                                                         >
-                                                            <TouchableOpacity
-                                                                style={{ flex: 9, marginRight: 5 }}
-                                                                onPress={() => {
-                                                                    handleChangeVideo(item);
-                                                                }}
-                                                            >
-                                                                <Text
-                                                                    style={styles.text}
-                                                                >
-                                                                    {item.movie} tập {item.episode}
-                                                                </Text>
-                                                            </TouchableOpacity>
-                                                            <TouchableOpacity
-                                                                style={styles.deletePlaylistTouch}
-                                                                onPress={() => {
-                                                                    handleDeleteVideoInPlaylist(item);
-                                                                }}
-                                                            >
-                                                                <Icon name="trash-outline" size={20} color="red" />
-                                                            </TouchableOpacity>
-                                                        </View>
-                                                    }
-                                                    keyExtractor={item => item.id}
-                                                />
-                                            </View>
-                                        </View>
-                                    ) : ('')
+                                                            {item.movie} tập {item.episode}
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                    <TouchableOpacity
+                                                        style={styles.deletePlaylistTouch}
+                                                        onPress={() => {
+                                                            handleDeleteVideoInPlaylist(item);
+                                                        }}
+                                                    >
+                                                        <Icon name="trash-outline" size={20} color="red" />
+                                                    </TouchableOpacity>
+                                                </View>
+                                            }
+                                            keyExtractor={item => item.id}
+                                        />
+                                    </View>
+                                </View>
                             }
                             {
-                                tabSelect == 2 ?
-                                    (
-                                        <View
-                                            style={styles.chatTabWrap}
-                                        >
-                                            <View
-                                                style={{ flex: 1, width: "100%" }}
-                                            >
-                                                <FlatList
-                                                    showsHorizontalScrollIndicator={false}
-                                                    nestedScrollEnabled
-                                                    data={messages}
-                                                    renderItem={({ item }) =>
-                                                        <View
+                                tabSelect == 2 &&
+                                <View
+                                    style={styles.chatTabWrap}
+                                >
+                                    <View
+                                        style={{ flex: 1, width: "100%" }}
+                                    >
+                                        <FlatList
+                                            showsHorizontalScrollIndicator={false}
+                                            nestedScrollEnabled
+                                            data={messages}
+                                            renderItem={({ item }) =>
+                                                <View
+                                                    style={
+                                                        [
+                                                            styles.messItem,
+                                                            uid == item.user.id ?
+                                                                { flexDirection: "row-reverse", } :
+                                                                { flexDirection: "row" }
+                                                        ]
+                                                    }
+                                                >
+                                                    <View
+                                                        style={{ flex: 1, alignItems: "center", }}
+                                                    >
+                                                        <Image
+                                                            source={{ uri: item.user.avatar }}
+                                                            style={styles.avatar}
+                                                        />
+                                                    </View>
+                                                    <View style={{ flex: 6, paddingHorizontal: 5 }}>
+                                                        <Text
                                                             style={
                                                                 [
-                                                                    styles.messItem,
+                                                                    styles.messUsername,
                                                                     uid == item.user.id ?
-                                                                        { flexDirection: "row-reverse", } :
-                                                                        { flexDirection: "row" }
+                                                                        { textAlign: "right" } : {}
                                                                 ]
                                                             }
                                                         >
-                                                            <View
-                                                                style={{ flex: 1, alignItems: "center", }}
-                                                            >
-                                                                <Image
-                                                                    source={{ uri: item.user.avatar }}
-                                                                    style={styles.avatar}
-                                                                />
-                                                            </View>
-                                                            <View style={{ flex: 6, paddingHorizontal: 5 }}>
-                                                                <Text
-                                                                    style={
-                                                                        [
-                                                                            styles.messUsername,
-                                                                            uid == item.user.id ?
-                                                                                { textAlign: "right" } : {}
-                                                                        ]
-                                                                    }
-                                                                >
-                                                                    {item.user.username} {uid == item.user.id ? "(You)" : ""}
-                                                                </Text>
-                                                                <Text
-                                                                    style={
-                                                                        [
-                                                                            styles.text,
-                                                                            styles.messContent
-                                                                        ]
-                                                                    }
-                                                                >
-                                                                    {item.message}
-                                                                </Text>
-                                                            </View>
-                                                        </View>
-                                                    }
-                                                    keyExtractor={(item, index) => index}
-                                                />
-                                            </View>
-                                            <TextInput
-                                                style={styles.chatInput}
-                                                mode="outlined"
-                                                right={
-                                                    <TextInput.Icon
-                                                        name="send"
-                                                        onPress={handleSendMess}
-                                                    />
-                                                }
-                                                onChangeText={(text) => {
-                                                    setMessageText(text);
-                                                }}
-                                                placeholder="Nhập tin nhắn"
-                                                value={messageText}
+                                                            {item.user.username} {uid == item.user.id ? "(You)" : ""}
+                                                        </Text>
+                                                        <Text
+                                                            style={
+                                                                [
+                                                                    styles.text,
+                                                                    styles.messContent
+                                                                ]
+                                                            }
+                                                        >
+                                                            {item.message}
+                                                        </Text>
+                                                    </View>
+                                                </View>
+                                            }
+                                            keyExtractor={(item, index) => index}
+                                        />
+                                    </View>
+                                    <TextInput
+                                        style={styles.chatInput}
+                                        mode="outlined"
+                                        right={
+                                            <TextInput.Icon
+                                                name="send"
+                                                onPress={handleSendMess}
                                             />
-                                        </View>
-                                    ) : ('')
+                                        }
+                                        onChangeText={(text) => {
+                                            setMessageText(text);
+                                        }}
+                                        placeholder="Nhập tin nhắn"
+                                        value={messageText}
+                                    />
+                                </View>
                             }
                             {
-                                tabSelect == 3 ?
-                                    (
-                                        <ScrollView>
-                                            {
-                                                viewers.map((e) =>
-                                                    <TouchableOpacity
-                                                        key={e.id}
-                                                        style={styles.viewersItem}
-                                                        onPress={() => { }}
-                                                    >
-                                                        <Image
-                                                            source={{ uri: e.avatar }}
-                                                            style={[
-                                                                styles.avatar,
-                                                                {
-                                                                    marginRight: 20,
-                                                                }
-                                                            ]}
-                                                        />
-                                                        <Text
-                                                            style={[
-                                                                styles.text,
-                                                                {
-                                                                    fontSize: 15,
-                                                                }
-                                                            ]}
-                                                        >
-                                                            {e.username} {uid == e.id ? "(You)" : ""}
-                                                        </Text>
-                                                    </TouchableOpacity>
-                                                )
-                                            }
-                                        </ScrollView>
-                                    ) : ('')
+                                tabSelect == 3 &&
+                                <ScrollView>
+                                    {
+                                        viewers.map((e) =>
+                                            <TouchableOpacity
+                                                key={e.id}
+                                                style={styles.viewersItem}
+                                                onPress={() => { }}
+                                            >
+                                                <Image
+                                                    source={{ uri: e.avatar }}
+                                                    style={[
+                                                        styles.avatar,
+                                                        {
+                                                            marginRight: 20,
+                                                        }
+                                                    ]}
+                                                />
+                                                <Text
+                                                    style={[
+                                                        styles.text,
+                                                        {
+                                                            fontSize: 15,
+                                                        }
+                                                    ]}
+                                                >
+                                                    {e.username} {uid == e.id ? "(You)" : ""}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        )
+                                    }
+                                </ScrollView>
                             }
 
                         </View>

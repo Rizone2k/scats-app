@@ -4,7 +4,7 @@ import {
     Text,
     Alert,
     StyleSheet,
-    FlatList,
+    ScrollView,
 } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { debounce } from "lodash";
@@ -72,36 +72,34 @@ const Search = ({ navigation }) => {
                 style={{ alignItems: "center", marginTop: 10 }}
             >
                 {
-                    arrMovie.length > 0 ?
-                        (
-                            <Text
-                                style={{ fontFamily: 'Montserrat', color: "#fff", fontSize: 17, paddingLeft: 10, marginBottom: 10 }}
-                            >
-                                Tìm thấy {pagination.total} kết quả
-                            </Text>
-                        ) : ('')
+                    arrMovie.length > 0 &&
+                    <Text
+                        style={{ fontFamily: 'Montserrat', color: "#fff", fontSize: 17, paddingLeft: 10, marginBottom: 10 }}
+                    >
+                        Tìm thấy {pagination.total} kết quả
+                    </Text>
                 }
-                <FlatList
-                    nestedScrollEnabled
-                    horizontal={false}
-                    numColumns={3}
-                    data={arrMovie}
-                    renderItem={({ item }) =>
-                        <CardVertical item={item} />
+                <ScrollView
+                    contentContainerStyle={styles.scrollView}
+                    showsVerticalScrollIndicator={false}
+                >
+                    <View style={styles.listWrap}>
+                        {
+                            arrMovie.map((item) =>
+                                <CardVertical item={item} key={item.id} />
+                            )
+                        }
+                    </View>
+                    {
+                        arrMovie.length > 0 &&
+                        <View style={{ padding: 5 }}>
+                            <Pagination
+                                pagination={pagination}
+                                onPageChange={handlePageChange}
+                            />
+                        </View>
                     }
-                    keyExtractor={item => item.id}
-                />
-                {
-                    arrMovie.length > 0 ?
-                        (
-                            <View style={{ padding: 5 }}>
-                                <Pagination
-                                    pagination={pagination}
-                                    onPageChange={handlePageChange}
-                                />
-                            </View>
-                        ) : ('')
-                }
+                </ScrollView>
             </View>
 
         </View>
@@ -117,4 +115,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingBottom: 55
     },
+    scrollView: {
+        alignItems: 'center',
+        paddingBottom: 20
+    },
+    listWrap: { flexDirection: "row", flexWrap: "wrap", justifyContent: "center", marginTop: 10 }
 });

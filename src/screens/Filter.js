@@ -12,9 +12,6 @@ import { Checkbox, RadioButton, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import queryString from 'query-string'
 import Header from '../components/Header';
-import getCountry from '../api/getCountry';
-import getGenre from '../api/getGenre';
-import getYear from '../api/getYear';
 import filterMovie from '../api/filterMovie';
 import CardVertical from '../components/CardVertical';
 import Pagination from '../components/Pagination';
@@ -31,9 +28,9 @@ const Filter = () => {
     const [arrMovie, setArrMovie] = useState([]);
     const [genresCheck, setGenresCheck] = useState([]);
     const [genresOpen, setGenresOpen] = useState(false);
-    const [countryCheck, setCountryCheck] = useState(null);
+    const [countryCheck, setCountryCheck] = useState(0);
     const [countriesOpen, setCountriesOpen] = useState(false);
-    const [yearCheck, setYearCheck] = useState(null);
+    const [yearCheck, setYearCheck] = useState(0);
     const [yearsOpen, setYearsOpen] = useState(false);
 
     const [pagination, setPagination] = useState({
@@ -82,8 +79,9 @@ const Filter = () => {
         <View style={styles.container}>
             <Header allowBack={true} />
             <ScrollView
-                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
                 nestedScrollEnabled
+                contentContainerStyle={styles.scrollView}
                 style={{ marginTop: 5 }}
             >
                 <View>
@@ -180,6 +178,16 @@ const Filter = () => {
                                 ]
                             }
                         >
+                            <RadioButton.Item
+                                status={countryCheck == 0 ? "checked" : "unchecked"}
+                                style={{ width: (width / 3) - 10 }}
+                                uncheckedColor="gray"
+                                mode={'android'}
+                                label="Tất cả"
+                                labelStyle={styles.labelSelection}
+                                value={0}
+                                onPress={() => setCountryCheck(0)}
+                            />
                             {
                                 countries.map((e) =>
                                     <RadioButton.Item
@@ -191,13 +199,7 @@ const Filter = () => {
                                         labelStyle={styles.labelSelection}
                                         key={e.id}
                                         value={e.id}
-                                        onPress={() => {
-                                            if (countryCheck == e.id) {
-                                                setCountryCheck(null);
-                                            } else {
-                                                setCountryCheck(e.id);
-                                            }
-                                        }}
+                                        onPress={() => setCountryCheck(e.id)}
                                     />
                                 )
                             }
@@ -234,6 +236,16 @@ const Filter = () => {
                             </Text>
                         </TouchableOpacity>
                         <View style={[styles.blockContent, yearsOpen ? { display: "flex" } : { display: "none" }]}>
+                            <RadioButton.Item
+                                status={yearCheck == 0 ? "checked" : "unchecked"}
+                                style={{ width: (width / 3) - 10 }}
+                                uncheckedColor="gray"
+                                mode={'android'}
+                                label="Tất cả"
+                                labelStyle={styles.labelSelection}
+                                value={0}
+                                onPress={() => setYearCheck(0)}
+                            />
                             {
                                 years.map((e) =>
                                     <RadioButton.Item
@@ -245,13 +257,7 @@ const Filter = () => {
                                         labelStyle={styles.labelSelection}
                                         key={e.id}
                                         value={e.id}
-                                        onPress={() => {
-                                            if (yearCheck == e.id) {
-                                                setYearCheck(null);
-                                            } else {
-                                                setYearCheck(e.id);
-                                            }
-                                        }}
+                                        onPress={() => setYearCheck(e.id)}
                                     />
                                 )
                             }
@@ -267,19 +273,17 @@ const Filter = () => {
                             onPress={() => {
                                 callApiFilter(1);
                             }}>
-                            Tìm kiếm
+                            Lọc phim
                         </Button>
                     </View>
                 </View>
                 {
-                    arrMovie.length > 0 ?
-                        (
-                            <Text
-                                style={styles.resultText}
-                            >
-                                Tìm thấy {pagination.total} kết quả
-                            </Text>
-                        ) : ('')
+                    arrMovie.length > 0 &&
+                    <Text
+                        style={styles.resultText}
+                    >
+                        Tìm thấy {pagination.total} kết quả
+                    </Text>
                 }
                 <View
                     style={styles.listWrap}
@@ -291,13 +295,11 @@ const Filter = () => {
                     }
                 </View>
                 {
-                    arrMovie.length > 0 ?
-                        (
-                            <Pagination
-                                pagination={pagination}
-                                onPageChange={handlePageChange}
-                            />
-                        ) : ('')
+                    arrMovie.length > 0 &&
+                    <Pagination
+                        pagination={pagination}
+                        onPageChange={handlePageChange}
+                    />
                 }
             </ScrollView >
 
@@ -311,7 +313,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#5a5454',
-        paddingBottom: 25
+    },
+    scrollView: {
+        alignItems: 'center',
+        paddingBottom: 20
     },
     title: { fontSize: 25, color: "#fff", textAlign: "center", fontFamily: 'Montserrat' },
     blockWrap: { paddingHorizontal: 10, marginTop: 10, },

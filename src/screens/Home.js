@@ -39,7 +39,7 @@ const Home = ({ navigation }) => {
     }
 
     useEffect(() => {
-        console.log("Home screen Mount");
+        // console.log(new Date(new Date().getTime()).toISOString());
         checkLoggedIn();
         return () => {
             console.log("Home screen Unmount");
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#5a5454',
     },
     scrollView: {
+        paddingBottom: 20
     },
 });
 export default Home;
