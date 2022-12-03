@@ -95,6 +95,7 @@ const Explore = () => {
                 ToastAndroid.show(rs.message, ToastAndroid.SHORT);
             }
         } catch (error) {
+            console.log(error)
             ToastAndroid.show("Lỗi", ToastAndroid.SHORT);
         }
     }
@@ -108,6 +109,7 @@ const Explore = () => {
                 ToastAndroid.show(rs.message, ToastAndroid.SHORT);
             }
         } catch (error) {
+            console.log(error)
             ToastAndroid.show("Lỗi", ToastAndroid.SHORT);
         }
     }

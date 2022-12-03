@@ -43,7 +43,8 @@ const Live = ({ route, navigation }) => {
 
     const [tabSelect, setTabSelect] = useState(1);
     const [visibleSearchModal, setVisibleSearchModal] = useState(false);
-    const [socket, setSocket] = useState(io('http://192.168.1.6:5550/'));
+    // const [socket, setSocket] = useState(io('http://192.168.1.6:5550/'));
+    const [socket, setSocket] = useState(io('http://api.scats.tk/'));
 
     const [playlist, setPlaylist] = useState([]);
     const [viewers, setViewers] = useState([]);
@@ -80,7 +81,7 @@ const Live = ({ route, navigation }) => {
 
     const joinRoom = async () => {
         uid = await SecureStore.getItemAsync('uid');
-        socket.emit('join-room', id, uid);
+        socket.emit('join-room', parseInt(id), parseInt(uid));
     }
 
     const handleChangeVideo = (video) => {
@@ -117,7 +118,6 @@ const Live = ({ route, navigation }) => {
     };
 
     useEffect(() => {
-        // socket = io('http://192.168.1.6:5550/');
         socket.on("user-join-room", (user) => {
             ToastAndroid.show(`${user.username} đã vào phòng`, ToastAndroid.SHORT);
             setViewers(viewers => [...viewers, user]);
@@ -152,7 +152,6 @@ const Live = ({ route, navigation }) => {
         });
 
         socket.on("position", position => {
-            // console.log(Math.abs(position - currentPosition));
             if (Math.abs(position - currentPosition) > 2500) {
                 setPosition(parseInt(position) + 1000);
                 player.current.playAsync();

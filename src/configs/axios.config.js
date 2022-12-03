@@ -6,8 +6,8 @@ async function getToken() {
 }
 
 const instance = axios.create({
-    baseURL: 'http://192.168.1.6:5550/api/v1/',
-    // baseURL: 'http://api.scats.tk/api/v1/',
+    // baseURL: 'http://192.168.1.6:5550/api/v1/',
+    baseURL: 'http://api.scats.tk/api/v1/',
     withCredentials: true,
 });
 
@@ -24,6 +24,17 @@ instance.interceptors.request.use(
     },
     error => {
         return Promise.reject(error)
+    }
+);
+
+instance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        const statusCode = error.response ? error.response.status : null;
+        if (statusCode === 401) {
+            // notifier.error('Please login to access this resource')
+        }
+        throw error;
     }
 );
 

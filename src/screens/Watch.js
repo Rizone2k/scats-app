@@ -444,7 +444,7 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         alignItems: 'center',
-        paddingBottom: 40
+        paddingBottom: 50
     },
     imageBackground: {
         width: width,
