@@ -43,8 +43,8 @@ const Live = ({ route, navigation }) => {
 
     const [tabSelect, setTabSelect] = useState(1);
     const [visibleSearchModal, setVisibleSearchModal] = useState(false);
-    // const [socket, setSocket] = useState(io('http://192.168.1.6:5550/'));
-    const [socket, setSocket] = useState(io('http://api.scats.tk/'));
+    const [socket, setSocket] = useState(io('http://192.168.1.6:5550/'));
+    // const [socket, setSocket] = useState(io('http://api.scats.tk/'));
 
     const [playlist, setPlaylist] = useState([]);
     const [viewers, setViewers] = useState([]);
@@ -152,7 +152,9 @@ const Live = ({ route, navigation }) => {
         });
 
         socket.on("position", position => {
-            if (Math.abs(position - currentPosition) > 2500) {
+            // console.log(Math.abs(position - currentPosition));
+            if (Math.abs(position - currentPosition) > 2000) {
+                console.log(Math.abs(position - currentPosition))
                 setPosition(parseInt(position) + 1000);
                 player.current.playAsync();
             }

@@ -12,7 +12,8 @@ const getRouteName = (route) => {
         routeName?.includes('WatchScreen') ||
         routeName?.includes('AuthScreen') ||
         routeName?.includes('FilterScreen') ||
-        routeName?.includes('LiveScreen')
+        routeName?.includes('LiveScreen') ||
+        routeName?.includes('LibraryScreen')
     ) {
         return "none";
     }

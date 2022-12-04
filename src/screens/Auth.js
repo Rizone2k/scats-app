@@ -29,29 +29,38 @@ const Auth = () => {
 
     const [usernameRegister, setUsernameRegister] = useState('');
     const [passwordRegister, setPasswordRegister] = useState('');
+    const [rePasswordRegister, setRePasswordRegister] = useState('');
 
     const [regUsernameValidate, setRegUsernameValidate] = useState(false);
     const [regPassValidate, setRegPassValidate] = useState(false);
     const [regRePassValidate, setRegRePassValidate] = useState(false);
 
+    const [showTextPassRegis, setShowTextPassRegis] = useState(false);
+    const [showTextRePassRegis, setShowTextRePassRegis] = useState(false);
+    const [showTextPass, setShowTextPass] = useState(false);
+
     const validatePassword = (text) => {
-        setPasswordRegister(text);
-        if (text.length >= 6) {
+        const t = text.trim().replace(' ', '')
+        setPasswordRegister(t);
+        if (t.length >= 6 && t == rePasswordRegister) {
             setRegPassValidate(true);
         } else {
             setRegPassValidate(false);
         }
     }
     const validateRePassword = (text) => {
-        if (text.length >= 6 && text == passwordRegister) {
+        const t = text.trim().replace(' ', '')
+        setRePasswordRegister(t);
+        if (t.length >= 6 && t == passwordRegister) {
             setRegRePassValidate(true);
         } else {
             setRegRePassValidate(false);
         }
     }
     const validateUsername = (text) => {
-        setUsernameRegister(text);
-        if (text.length >= 6) {
+        const t = text.trim().toLowerCase().replace(' ', '')
+        setUsernameRegister(t);
+        if (t.length >= 6) {
             setRegUsernameValidate(true);
         } else {
             setRegUsernameValidate(false);
@@ -100,23 +109,27 @@ const Auth = () => {
                         <Title style={styles.formTitle}>Đăng nhập</Title>
                         <TextInput
                             style={styles.formInput}
-                            mode="outlined"
+                            mode="flat"
                             label={<Text style={{ fontFamily: 'Montserrat' }}>Tên Đăng Nhập</Text>}
                             onChangeText={(text) => {
-                                setUsernameLogin(text);
+                                setUsernameLogin(text.trim().toLowerCase().replace(' ', ''));
                             }}
+                            value={usernameLogin}
                             placeholder="Nhập tên đăng nhập"
                         />
                         <TextInput
                             style={styles.formInput}
-                            mode="outlined"
+                            mode="flat"
                             label={<Text style={{ fontFamily: 'Montserrat' }}>Mật Khẩu</Text>}
-                            secureTextEntry
+                            secureTextEntry={!showTextPass}
                             placeholder="Nhập mật khẩu"
                             onChangeText={(text) => {
-                                setPasswordLogin(text);
+                                setPasswordLogin(text.trim().replace(' ', ''));
                             }}
-                            right={<TextInput.Icon name="eye-outline" />}
+                            value={passwordLogin}
+                            right={
+                                <TextInput.Icon onPress={() => setShowTextPass(!showTextPass)} name="eye-outline" />
+                            }
                         />
                         <Button
                             style={styles.formBtn}
@@ -133,12 +146,14 @@ const Auth = () => {
                         <TextInput
                             style={styles.formInput}
                             theme={{ colors: { primary: regUsernameValidate ? 'green' : 'red' } }}
-                            mode="outlined"
+                            mode="flat"
                             error={!regUsernameValidate}
                             outlineColor={regUsernameValidate ? 'green' : ''}
                             activeOutlineColor={regUsernameValidate ? 'green' : ''}
                             label={<Text style={{ fontFamily: 'Montserrat' }}>Tên Đăng Nhập</Text>}
+                            value={usernameRegister}
                             onChangeText={(text) => {
+                                setUsernameRegister(text.trim().toLowerCase().replace(' ', ''));
                                 validateUsername(text);
                             }}
                             placeholder="Nhập tên đăng nhập"
@@ -146,17 +161,20 @@ const Auth = () => {
                         <TextInput
                             style={styles.formInput}
                             theme={{ colors: { primary: regPassValidate ? 'green' : 'red' } }}
-                            mode="outlined"
+                            mode="flat"
                             error={!regPassValidate}
                             outlineColor={regPassValidate ? 'green' : ''}
                             activeOutlineColor={regPassValidate ? 'green' : ''}
                             label={<Text style={{ fontFamily: 'Montserrat' }}>Mật Khẩu</Text>}
-                            secureTextEntry
+                            secureTextEntry={!showTextPassRegis}
                             onChangeText={(text) => {
                                 validatePassword(text);
                             }}
+                            value={passwordRegister}
                             placeholder="Mật khẩu"
-                            right={<TextInput.Icon name="eye-outline" />}
+                            right={
+                                <TextInput.Icon onPress={() => setShowTextPassRegis(!showTextPassRegis)} name="eye-outline" />
+                            }
                         />
                         <TextInput
                             style={styles.formInput}
@@ -164,14 +182,17 @@ const Auth = () => {
                             error={!regRePassValidate}
                             outlineColor={regRePassValidate ? 'green' : ''}
                             activeOutlineColor={regRePassValidate ? 'green' : ''}
-                            mode="outlined"
+                            mode="flat"
                             label={<Text style={{ fontFamily: 'Montserrat' }}>Nhập Lại Mật Khẩu</Text>}
-                            secureTextEntry
+                            secureTextEntry={!showTextRePassRegis}
                             onChangeText={(text) => {
                                 validateRePassword(text);
                             }}
                             placeholder="Nhập lại mật khẩu"
-                            right={<TextInput.Icon name="eye-outline" onPress={() => { console.log("123") }} />}
+                            value={rePasswordRegister}
+                            right={
+                                <TextInput.Icon onPress={() => setShowTextRePassRegis(!showTextRePassRegis)} name="eye-outline" />
+                            }
                         />
                         <Button
                             style={styles.formBtn}
@@ -190,7 +211,7 @@ const Auth = () => {
                         onPress={() => setIsLogin(true)}
                         style={[styles.touchStyle, styles.touchLeft, isLogin ? styles.touchActive : ""]}>
                         <Icon
-                            name="log-in-outline" size={17} color="#000"
+                            name="log-in-outline" size={17} color="#fff"
                         />
                         <Text style={styles.touchText}>
                             Đăng nhập
@@ -200,7 +221,7 @@ const Auth = () => {
                         onPress={() => setIsLogin(false)}
                         style={[styles.touchStyle, styles.touchRigth, isLogin ? "" : styles.touchActive]}>
                         <Icon
-                            name="person-add-outline" size={17} color="#000"
+                            name="person-add-outline" size={17} color="#fff"
                         />
                         <Text style={styles.touchText}>
                             Đăng ký
@@ -217,6 +238,7 @@ export default Auth;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#5a5454',
     },
     form: {
         height: "80%",
@@ -228,7 +250,9 @@ const styles = StyleSheet.create({
         fontSize: 35,
         lineHeight: 45,
         textTransform: 'uppercase',
-        fontFamily: 'MontserratBold'
+        fontFamily: 'MontserratBold',
+        color: 'white',
+        marginBottom: 20
     },
     formInput: {
         width: "100%",
@@ -244,7 +268,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         borderWidth: 1,
-        borderRadius: 100
+        borderRadius: 100,
+        borderColor: "#fff"
     },
     touchStyle: {
         flex: 1,
@@ -252,22 +277,25 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         paddingHorizontal: 10,
         paddingVertical: 8,
+        alignItems: "center",
     },
     touchLeft: {
         borderRightWidth: 1,
         borderBottomLeftRadius: 100,
-        borderTopLeftRadius: 100
+        borderTopLeftRadius: 100,
+        borderColor: "#fff"
     },
     touchRigth: {
         borderBottomRightRadius: 100,
-        borderTopRightRadius: 100
+        borderTopRightRadius: 100,
     },
     touchActive: {
-        backgroundColor: "#0ff",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
     },
     touchText: {
         fontSize: 15,
         marginLeft: 5,
-        fontFamily: 'Montserrat'
+        fontFamily: 'Montserrat',
+        color: "#fff"
     }
 });

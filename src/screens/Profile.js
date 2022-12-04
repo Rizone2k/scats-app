@@ -85,7 +85,8 @@ const Profile = ({ navigation }) => {
     useFocusEffect(
         useCallback(() => {
             if (isLoggedIn) {
-                // navigation.navigate("AuthScreen");
+                setEmail(currentUser.email);
+                setUsername(currentUser.username);
             }
         }, [isLoggedIn])
     );
@@ -257,6 +258,7 @@ const Profile = ({ navigation }) => {
                                                 alignItems: "center",
                                                 marginVertical: 5
                                             }}
+                                            onPress={() => navigation.navigate("LibraryScreen")}
                                         >
                                             <Icon name="library-outline" size={20} color="#fff" />
                                             <Text

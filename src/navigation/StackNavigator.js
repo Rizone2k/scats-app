@@ -8,6 +8,7 @@ import WatchScreen from '../screens/Watch';
 import AuthScreen from '../screens/Auth';
 import FilterScreen from '../screens/Filter';
 import LiveScreen from '../screens/Live';
+import LibraryScreen from '../screens/Library';
 
 const Stack = createStackNavigator();
 const screenOptionStyle = {
@@ -48,6 +49,8 @@ const ProfileStackNavigator = () => {
         <Stack.Navigator screenOptions={screenOptionStyle}>
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
             <Stack.Screen name="AuthScreen" component={AuthScreen} />
+            <Stack.Screen name="LibraryScreen" component={LibraryScreen} />
+            <Stack.Screen name="WatchScreen" component={WatchScreen} />
         </Stack.Navigator>
     )
 }
